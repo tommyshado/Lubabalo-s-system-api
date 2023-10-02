@@ -1,7 +1,6 @@
 
 import express from "express";
 import bodyParser from "body-parser";
-import pgPromise from "pg-promise";
 
 // Routes imports
 import shoesRoutes from "./routes/shoesRoutes.js";

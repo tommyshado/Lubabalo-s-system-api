@@ -1,7 +1,10 @@
 import shoesService from "../services/shoesService.js";
+import database from "../model/dbConnection.js";
 import { Router } from "express";
 
-const ShoesService = shoesService();
+// Service instance
+const ShoesService = shoesService(database);
+// Router instance
 const router = Router();
 
 router.get("/", (req, res) => {
@@ -21,7 +24,7 @@ router.get("/brand/brand/:brandname/size/:size", (req, res) => {
 });
 
 router.post("/brand/shoes/sold/:id", (req, res) => {
-    console.log("sold shoe...");
+    console.log("sold shoes...");
 });
 
 router.post("/", (req, res) => {
