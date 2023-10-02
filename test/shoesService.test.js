@@ -32,23 +32,31 @@ const ShoesService = shoesService(database);
 describe("shoes service testing", function () {
     this.timeout(10000);
 
+    // STORE shoe id
+    let shoeId;
+
     beforeEach(async () => {
         try {
             await database.none(
                 "TRUNCATE TABLE stock_inventory RESTART IDENTITY CASCADE"
             );
 
-            // INSERTING a shoes and GETTING a shoe id
-            const data = [
-                "new_balance",
-                "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/e0a-NEW-BALANCE-BBW550DY-550-WHITE-side-33p.jpg",
-                1,
-                2599.0,
-                "white",
-            ];
-            await database.none(
-                "insert into stock_inventory (shoe_name, image, shoe_qty, shoe_price, shoe_color) values ($1, $2, $3, $4, $5)", data
-            );
+            // INSERTING a shoes
+            const data = {
+                shoeName: "new_balance",
+                image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/e0a-NEW-BALANCE-BBW550DY-550-WHITE-side-33p.jpg",
+                qty: 1,
+                shoePrice: 2599.0,
+                shoeColor: "white",
+            };
+            // INSERTING values into the database
+            await ShoesService.insertShoe(data);
+
+            // GET shoe quantity using 'where'
+            const getId = await database.oneOrNone(`select shoe_id from stock_inventory where shoe_name = ${data.shoeName}`);
+            // SET shoeQty var with shoe quantity
+            shoeId = getId.shoe_id;
+
         } catch (error) {
             console.log(error);
             throw error;
@@ -118,18 +126,18 @@ describe("shoes service testing", function () {
     });
 
     it("should be able to decrease the inventory of shoes when given a shoe id", async () => {
-        // takes in an id of one from the inserted shoe in the beforeEach() function
-        await ShoesService.updateInventory(1);
+        // takes in an id from the shoeId global variable
+        await ShoesService.updateInventory(shoeId);
         // GET the shoe quantity
         const qty = await database.oneOrNone(`select shoe_qty from stock_inventory where shoe_id = '1'`);
         assert.equal("0", qty.shoe_qty);
     });
 
     it("should be able to delete a shoe when given a shoe id and when the stock inventory is 0", async () => {
-        // takes in an id of one from the inserted shoe in the beforeEach() function
-        await ShoesService.updateInventory(1);
-        // takes in an id of one from the inserted shoe in the beforeEach() function
-        await ShoesService.deleteShoe(1);
+        // takes in an id from the shoeId global variable
+        await ShoesService.updateInventory(shoeId);
+        // delete a shoe from the inventory
+        await ShoesService.deleteShoe(shoeId);
         assert.deepEqual([], await ShoesService.getShoes());
     });
 });
