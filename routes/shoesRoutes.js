@@ -27,20 +27,52 @@ router.get("/brand/:brandname", async (req, res) => {
             data: filteredByBrand
         });
         
-    } catch (error) {
+    } catch (err) {
         res.json({
-            status: "error"
+            status: "error",
+            error: err.stack
         })
         
     };
 });
 
-router.get("/brand/size/:size", (req, res) => {
-    res.send("shoes size...");
+router.get("/brand/size/:size", async (req, res) => {
+    try {
+        const shoeSize = req.params.size;
+        const filteredBySize = await ShoesService.getShoeBySize(shoeSize);
+        res.status(200).json({
+            status: "success",
+            data: filteredBySize
+        });
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        })
+        
+    };
 });
 
-router.get("/brand/brand/:brandname/size/:size", (req, res) => {
-    res.send("shoes brand and size...");
+router.get("/brand/brand/:brandname/size/:size", async (req, res) => {
+    try {
+        const data = {
+            shoeSize: req.params.size,
+            shoeName: req.params.brandname
+        };
+        const getFiltered = await ShoesService.getShoeBySizeAndBrand(data);
+        res.status(200).json({
+            status: "success",
+            data: getFiltered
+        });
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        })
+        
+    };
 });
 
 router.post("/brand/shoes/sold/updateInventory/:id", async (req, res) => {
@@ -48,20 +80,35 @@ router.post("/brand/shoes/sold/updateInventory/:id", async (req, res) => {
         // DECREASE the stock levels by one
         const updatedQty = await ShoesService.updateInventory(req.params.id);
 
-        res.json({
+        res.status(200).json({
             status: "success",
             data: updatedQty
         });
         
-    } catch (error) {
+    } catch (err) {
         res.json({
-            status: "error"
+            status: "error",
+            error: err.stack
         });
     };
 });
 
-router.post("/brand/shoes/sold/:id", (req, res) => {
-    console.log("sold shoes...");
+router.post("/brand/shoes/sold/:id", async (req, res) => {
+    try {
+        // DECREASE the stock levels by one
+        const updatedQty = await ShoesService.deleteShoe(req.params.id);
+
+        res.status(200).json({
+            status: "success",
+            data: updatedQty
+        });
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        });
+    };
 });
 
 router.post("/", async (req, res) => {
@@ -72,17 +119,19 @@ router.post("/", async (req, res) => {
             qty: req.body.qty,
             shoePrice: req.body.shoePrice,
             shoeColor: req.body.shoeColor,
+            shoeSize: req.body.ShoeSize
         };
         const insertedShoe = await ShoesService.insertShoe(createShoe);
 
-        res.json({
+        res.status(200).json({
             status: "success",
             data: insertedShoe
         });
         
-    } catch (error) {
+    } catch (err) {
         res.json({
-            status: "error"
+            status: "error",
+            error: err.stack
         });
     };
 });
