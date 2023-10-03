@@ -32,16 +32,13 @@ const ShoesService = shoesService(database);
 describe("shoes service testing", function () {
     this.timeout(10000);
 
-    // STORE shoe id
-    let shoeId;
-
     beforeEach(async () => {
         try {
             await database.none(
                 "TRUNCATE TABLE stock_inventory RESTART IDENTITY CASCADE"
             );
 
-            // INSERTING a shoes
+            // INSERTING a shoe
             const data = {
                 shoeName: "new_balance",
                 image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/e0a-NEW-BALANCE-BBW550DY-550-WHITE-side-33p.jpg",
@@ -51,11 +48,6 @@ describe("shoes service testing", function () {
             };
             // INSERTING values into the database
             await ShoesService.insertShoe(data);
-
-            // GET shoe quantity using 'where'
-            const getId = await database.oneOrNone(`select shoe_id from stock_inventory where shoe_name = ${data.shoeName}`);
-            // SET shoeQty var with shoe quantity
-            shoeId = getId.shoe_id;
 
         } catch (error) {
             console.log(error);
@@ -127,7 +119,7 @@ describe("shoes service testing", function () {
 
     it("should be able to decrease the inventory of shoes when given a shoe id", async () => {
         // takes in an id from the shoeId global variable
-        await ShoesService.updateInventory(shoeId);
+        await ShoesService.updateInventory(1);
         // GET the shoe quantity
         const qty = await database.oneOrNone(`select shoe_qty from stock_inventory where shoe_id = '1'`);
         assert.equal("0", qty.shoe_qty);
@@ -135,9 +127,25 @@ describe("shoes service testing", function () {
 
     it("should be able to delete a shoe when given a shoe id and when the stock inventory is 0", async () => {
         // takes in an id from the shoeId global variable
-        await ShoesService.updateInventory(shoeId);
+        await ShoesService.updateInventory(1);
         // delete a shoe from the inventory
-        await ShoesService.deleteShoe(shoeId);
+        await ShoesService.deleteShoe(1);
         assert.deepEqual([], await ShoesService.getShoes());
+    });
+
+    it("should be able to filter by brand name", async () => {
+        // INSERTING another shoe
+        const data__ = {
+            shoeName: "nike_jordan",
+            image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/ed1-NIKE-DV0991-101-WMNS-AIR-JORDAN-1-MID-WHITEBLACK-WHITE-side-SbB.jpg",
+            qty: 4,
+            shoePrice: 2499.0,
+            shoeColor: "black",
+        };
+        // INSERTING values into the database
+        await ShoesService.insertShoe(data__);
+        // takes in a param of brand name
+        const filterByBrandName = await ShoesService.getShoeBrand(data__.shoeName);
+        assert.deepEqual(1, filterByBrandName.length);
     });
 });
