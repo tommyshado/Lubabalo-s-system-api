@@ -54,7 +54,7 @@ router.get("/brand/size/:size", async (req, res) => {
     };
 });
 
-router.get("/brand/brand/:brandname/size/:size", async (req, res) => {
+router.get("/brand/:brandname/size/:size", async (req, res) => {
     try {
         const data = {
             shoeSize: req.params.size,
