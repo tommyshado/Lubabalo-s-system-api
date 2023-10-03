@@ -29,3 +29,5 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+      env: 
+          DB_CONNECTION_FOR_TESTING: "postgres://oyudfdrn:YwW8bBEJVlcct8IrPjEmlXQJ_UHsTPOM@cornelius.db.elephantsql.com/oyudfdrn"
