@@ -19,5 +19,5 @@ app.use("/api/shoes", shoesRoutes);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log("app started at PORT", PORT);
+    console.log("🚀 app started at PORT", PORT);
 });

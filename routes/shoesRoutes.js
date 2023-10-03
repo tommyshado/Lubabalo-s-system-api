@@ -9,6 +9,7 @@ const router = Router();
 
 router.get("/", async (req, res) => {
     try {
+        // GET all the available shoes
         const shoes = await ShoesService.getShoes();
         res.status(200).json(shoes);
         
@@ -17,8 +18,21 @@ router.get("/", async (req, res) => {
     };
 });
 
-router.get("/brand/:brandname", (req, res) => {
-    res.send("shoes brand...");
+router.get("/brand/:brandname", async (req, res) => {
+    try {
+        const nameOfBrand = req.params.brandname;
+        const filteredByBrand = await ShoesService.getShoeBrand(nameOfBrand);
+        res.status(200).json({
+            status: "success",
+            data: filteredByBrand
+        });
+        
+    } catch (error) {
+        res.json({
+            status: "error"
+        })
+        
+    };
 });
 
 router.get("/brand/size/:size", (req, res) => {
@@ -31,12 +45,12 @@ router.get("/brand/brand/:brandname/size/:size", (req, res) => {
 
 router.post("/brand/shoes/sold/updateInventory/:id", async (req, res) => {
     try {
-        const shoeUpdate = await ShoesService.updateInventory(req.params.id);
-
-        res.send(shoeUpdate);
+        // DECREASE the stock levels by one
+        const updatedQty = await ShoesService.updateInventory(req.params.id);
 
         res.json({
-            status: "success"
+            status: "success",
+            data: updatedQty
         });
         
     } catch (error) {
@@ -52,19 +66,18 @@ router.post("/brand/shoes/sold/:id", (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const shoe = {
+        const createShoe = {
             shoeName: req.body.shoeName,
             image: req.body.image,
             qty: req.body.qty,
             shoePrice: req.body.shoePrice,
             shoeColor: req.body.shoeColor,
         };
-        const insertedShoe = await ShoesService.insertShoe(shoe);
-
-        res.send(insertedShoe);
+        const insertedShoe = await ShoesService.insertShoe(createShoe);
 
         res.json({
             status: "success",
+            data: insertedShoe
         });
         
     } catch (error) {
