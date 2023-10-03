@@ -45,6 +45,7 @@ describe("shoes service testing", function () {
                 qty: 1,
                 shoePrice: 2599.0,
                 shoeColor: "white",
+                shoeSize: 8,
             };
             // INSERTING values into the database
             await ShoesService.insertShoe(data);
@@ -64,6 +65,7 @@ describe("shoes service testing", function () {
                 qty: 5,
                 shoePrice: 1799.0,
                 shoeColor: "white",
+                shoeSize: 7
             };
             // INSERTING values into the database
             await ShoesService.insertShoe(data);
@@ -88,6 +90,7 @@ describe("shoes service testing", function () {
                     5,
                     1799.0,
                     "white",
+                    4
                 ],
                 [
                     "nike",
@@ -95,15 +98,16 @@ describe("shoes service testing", function () {
                     7,
                     2199.0,
                     "white",
+                    9
                 ],
             ];
             // INSERTING values into the database
             await database.none(
-                "insert into stock_inventory (shoe_name, image, shoe_qty, shoe_price, shoe_color) values ($1, $2, $3, $4, $5)",
+                "insert into stock_inventory (shoe_name, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6)",
                 data[0]
             );
             await database.none(
-                "insert into stock_inventory (shoe_name, image, shoe_qty, shoe_price, shoe_color) values ($1, $2, $3, $4, $5)",
+                "insert into stock_inventory (shoe_name, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6)",
                 data[1]
             );
 
@@ -141,11 +145,46 @@ describe("shoes service testing", function () {
             qty: 4,
             shoePrice: 2499.0,
             shoeColor: "black",
+            shoeSize: 10
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data__);
         // takes in a param of brand name
         const filterByBrandName = await ShoesService.getShoeBrand(data__.shoeName);
+        assert.deepEqual(1, filterByBrandName.length);
+    });
+
+    it("should be able to filter by shoe size", async () => {
+        // INSERTING another shoe
+        const data__ = {
+            shoeName: "asics",
+            image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/4bc-ASICS-1201A582-700-GEL-LYTE-III-OG-BARELY-ROSE-side-b1c.jpg",
+            qty: 2,
+            shoePrice: 1399.0,
+            shoeColor: "purple",
+            shoeSize: 3
+        };
+        // INSERTING values into the database
+        await ShoesService.insertShoe(data__);
+        // takes in a param of brand name
+        const filterByBrandName = await ShoesService.getShoeBySize(data__.shoeSize);
+        assert.deepEqual(1, filterByBrandName.length);
+    });
+
+    it("should be able to filter for brand and size", async () => {
+        // INSERTING another shoe
+        const data__ = {
+            shoeName: "converse",
+            image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/pics/product/large/162053c-side_1.jpg",
+            qty: 3,
+            shoePrice: 1499.0,
+            shoeColor: "white",
+            shoeSize: 9
+        };
+        // INSERTING values into the database
+        await ShoesService.insertShoe(data__);
+        // takes in a param of brand name
+        const filterByBrandName = await ShoesService.getShoeBySizeAndBrand(data__);
         assert.deepEqual(1, filterByBrandName.length);
     });
 });

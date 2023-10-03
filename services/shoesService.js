@@ -14,9 +14,10 @@ const shoesService = database => {
             shoe.image,
             shoe.qty,
             shoe.shoePrice,
-            shoe.shoeColor
+            shoe.shoeColor,
+            shoe.shoeSize
         ];
-        await database.none("insert into stock_inventory (shoe_name, image, shoe_qty, shoe_price, shoe_color) values ($1, $2, $3, $4, $5)", data);
+        await database.none("insert into stock_inventory (shoe_name, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6)", data);
     };
 
     // CREATE a function that takes in an id as params and delete a shoe from the database using the given id FIRST...
@@ -32,9 +33,11 @@ const shoesService = database => {
         // RETURN all the shoes for a given brand
 
     // CREATE a function that takes in a size AND...
+    const getShoeBySize = async (shoeSize) => await database.manyOrNone(`select * from stock_inventory where shoe_size = '${shoeSize}'`);
         // RETURN all the shoes for a given size
 
     // CREATE a function that takes in a brand and size as objects AND...
+    const getShoeBySizeAndBrand = async (shoe) => await database.manyOrNone(`select * from stock_inventory where shoe_size = '${shoe.shoeSize}' and shoe_name = '${shoe.shoeName}'`);
         // RETURN all the shoes for a given brand and size
 
     return {
@@ -42,7 +45,9 @@ const shoesService = database => {
         insertShoe,
         updateInventory,
         deleteShoe,
-        getShoeBrand
+        getShoeBrand,
+        getShoeBySize,
+        getShoeBySizeAndBrand
     }
 };
 
