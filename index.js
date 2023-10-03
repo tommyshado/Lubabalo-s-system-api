@@ -2,6 +2,9 @@
 import express from "express";
 import bodyParser from "body-parser";
 
+// Cors import
+import cors from "cors";
+
 // Routes imports
 import shoesRoutes from "./routes/shoesRoutes.js";
 
@@ -14,6 +17,10 @@ app.use(bodyParser.json());
 
 // Middleware
 app.use("/api/shoes", shoesRoutes);
+
+app.use(cors({
+    origin: "*"
+}));
 
 // PORT variable
 const PORT = process.env.PORT || 3000;
