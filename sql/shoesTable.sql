@@ -14,5 +14,6 @@ create table stock_inventory (
     image BYTEA not null,
     shoe_qty numeric not null,
     shoe_price numeric not null,
-    shoe_color VARCHAR(30) not null
+    shoe_color VARCHAR(30) not null,
+    shoe_size numeric not null
 )
