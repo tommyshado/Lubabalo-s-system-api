@@ -95,7 +95,7 @@ router.post("/brand/shoes/sold/updateInventory/:id", async (req, res) => {
 
 router.post("/brand/shoes/sold/:id", async (req, res) => {
     try {
-        // DECREASE the stock levels by one
+        // DELETE a shoe
         const updatedQty = await ShoesService.deleteShoe(req.params.id);
 
         res.status(200).json({
