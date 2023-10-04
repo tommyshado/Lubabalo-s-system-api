@@ -29,7 +29,7 @@ const shoesService = database => {
     const deleteShoe = async (shoeId) => await database.oneOrNone(`delete from stock_inventory where shoe_id = ${shoeId} and shoe_qty = 0`);
 
     // CREATE a function that takes in a brand name which comes from the params AND...
-    const getShoeBrand = async (brandname) => await database.manyOrNone(`select * from stock_inventory where shoe_name = '${brandname}'`);
+    const getShoeBrand = async (brandname) => await database.manyOrNone(`select * from stock_inventory where shoe_name like '%${brandname}%'`);
         // RETURN all the shoes for a given brand
 
     // CREATE a function that takes in a size AND...
