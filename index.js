@@ -7,6 +7,7 @@ import cors from "cors";
 
 // Routes imports
 import shoesRoutes from "./routes/shoesRoutes.js";
+import authRouter from "./routes/auth.js"
 
 const app = express();
 
@@ -15,8 +16,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-// Middleware
+// Routes Middleware
 app.use("/api/shoes", shoesRoutes);
+app.use("/api/user", authRouter);
 
 app.use(cors({
     origin: "*"
