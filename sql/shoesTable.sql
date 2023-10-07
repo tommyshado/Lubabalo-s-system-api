@@ -17,3 +17,11 @@ create table stock_inventory (
     shoe_color VARCHAR(30) not null,
     shoe_size numeric not null
 )
+
+create table user_signup (
+    user_id serial PRIMARY KEY,
+    name text unique not null,
+    password VARCHAR(30),
+    email VARCHAR(30),
+    role VARCHAR(30)
+)
