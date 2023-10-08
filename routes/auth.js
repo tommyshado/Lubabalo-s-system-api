@@ -74,7 +74,7 @@ authRouter.post("/login", async (req, res) => {
         };
 
         // GET password from the database
-        const password = AuthService.login(user);
+        const password = AuthService.getPassword(user);
         const validPassword = await bcrypt.compare(user.password, password.password);
         if (!validPassword) return res.status(400).json({
             status: "error",
