@@ -21,7 +21,7 @@ create table stock_inventory (
 create table user_signup (
     user_id serial PRIMARY KEY,
     name text unique not null,
-    password VARCHAR(30),
-    email VARCHAR(30),
-    role VARCHAR(30)
+    password VARCHAR(30) not null,
+    email VARCHAR(30) not null,
+    role VARCHAR(30) not null
 )
