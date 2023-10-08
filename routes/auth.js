@@ -28,6 +28,7 @@ authRouter.post("/signup", async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
 
+    // USER object
     const user = {
         name: req.body.name,
         email: req.body.email,
@@ -52,8 +53,37 @@ authRouter.post("/signup", async (req, res) => {
 
 authRouter.post("/login", async (req, res) => {
     try {
-        // RETRIEVE the password from the database and...
-        // compare the password with the password that the user enter in the req.body.password
+        // Validate req.body
+        const { error } = loginValidation(req.body);
+        if (error) return res.status(400).json({
+            status: "error",
+            error: error.details[0].message
+        });
+        // Check if email already in the database
+        const email = AuthService.getEmail(user.email);
+        if (!email) return res.status(400).json({
+            status: "error",
+            error: "Invalid email."
+        });
+
+        // USER object
+        const user = {
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password
+        };
+
+        // GET password from the database
+        const password = AuthService.login(user);
+        const validPassword = await bcrypt.compare(user.password, password.password);
+        if (!validPassword) return res.status(400).json({
+            status: "error",
+            error: "Invalid password."
+        });
+
+        res.status(200).json({
+            status: "Logged in..."
+        });
         
     } catch (err) {
         res.json({
