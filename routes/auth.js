@@ -18,7 +18,7 @@ authRouter.post("/signup", async (req, res) => {
     });
 
     // Check if email already in the database
-    const email = AuthService.getEmail(user.email);
+    const email = AuthService.checkEmail(user.email);
     if (email) return res.status(400).json({
         status: "error",
         error: "Email already exists."
@@ -60,7 +60,7 @@ authRouter.post("/login", async (req, res) => {
             error: error.details[0].message
         });
         // Check if email already in the database
-        const email = AuthService.getEmail(user.email);
+        const email = AuthService.checkEmail(user.email);
         if (!email) return res.status(400).json({
             status: "error",
             error: "Invalid email."

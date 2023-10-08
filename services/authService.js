@@ -10,7 +10,7 @@ const authService = (database) => {
         await database.none("insert into user_signup (name, email, password) values ($1, $2, $3)", data);
     };
 
-    const getEmail = async (email) => {
+    const checkEmail = async (email) => {
         await database.oneOrNone(`select * from user_signup where email = '${email}'`);
     };
 
@@ -20,7 +20,7 @@ const authService = (database) => {
 
     return {
         createUser,
-        getEmail,
+        checkEmail,
         getPassword
     };
 };
