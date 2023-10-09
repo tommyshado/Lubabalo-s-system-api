@@ -8,13 +8,10 @@ const schema = {
     password: joi.string(6).required()
 };
 
-const registerValidation = (data) => {
+export const registerValidation = (data) => {
     return joi.validate(data, schema);
 };
 
-const loginValidation = (data) => {
+export const loginValidation = (data) => {
     return joi.validate(data, schema);
 };
-
-export {registerValidation};
-export { loginValidation }; 
