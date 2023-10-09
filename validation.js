@@ -1,5 +1,5 @@
 // Validation
-import joi from "joi";
+import joi from "@hapi/joi";
 
 // Schema
 const schema = {
