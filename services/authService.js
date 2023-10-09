@@ -15,7 +15,7 @@ const authService = (database) => {
     };
 
     const getPassword = async (user) => {
-        await database.oneOrNone(`select password from user_signup where name = '${user.name}'`);
+        await database.oneOrNone(`select password from user_signup where email = '${user.email}'`);
     };
 
     return {

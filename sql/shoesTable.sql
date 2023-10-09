@@ -11,7 +11,7 @@
 create table stock_inventory (
     shoe_id serial PRIMARY KEY,
     shoe_name VARCHAR(30) not null,
-    image BYTEA not null,
+    image text not null,
     shoe_qty numeric not null,
     shoe_price numeric not null,
     shoe_color VARCHAR(30) not null,
@@ -20,8 +20,7 @@ create table stock_inventory (
 
 create table user_signup (
     user_id serial PRIMARY KEY,
-    name text unique not null,
-    password VARCHAR(30) not null,
-    email VARCHAR(30) not null,
-    role VARCHAR(30) not null
+    name text not null,
+    password text not null,
+    email text unique not null
 )
