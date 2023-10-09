@@ -16,5 +16,4 @@ const loginValidation = (data) => {
     return joi.validate(data, schema);
 };
 
-export {registerValidation};
-export {loginValidation};
+export default { registerValidation, loginValidation };

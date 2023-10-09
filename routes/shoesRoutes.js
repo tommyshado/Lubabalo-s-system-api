@@ -11,10 +11,16 @@ router.get("/", async (req, res) => {
     try {
         // GET all the available shoes
         const shoes = await ShoesService.getShoes();
-        res.status(200).json(shoes);
+        res.status(200).json({
+            status: "success",
+            data: shoes
+        });
         
-    } catch (error) {
-        res.status(500).json({ status: "error" });
+    } catch (err) {
+        res.status(500).json({ 
+            status: "error",
+            error: err.stack
+        });
     };
 });
 
