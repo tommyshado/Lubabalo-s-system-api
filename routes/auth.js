@@ -35,6 +35,22 @@ authRouter.post("/signup", async (req, res) => {
     };
 });
 
+authRouter.get("/signup/users", async (req, res) => {
+    try {
+        const users = await AuthService.getUsers();
+        res.json({
+            status: "success",
+            users: users
+        });
+        
+    } catch (err) {
+        res.status(400).json({
+            status: "error",
+            error: err.stack
+        })
+    };
+});
+
 authRouter.post("/login", async (req, res) => {
     try {
         // USER object

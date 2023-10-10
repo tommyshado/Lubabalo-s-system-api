@@ -7,19 +7,18 @@ const authService = (database) => {
             user.email,
             user.password,
         ];
-        await database.none("insert into user_signup (name, email, password) values ($1, $2, $3)", data);
+        await database.none("insert into user_signup (username, email, password) values ($1, $2, $3)", data);
     };
 
-    const checkEmail = async (email) => {
-        await database.oneOrNone(`select * from user_signup where email = '${email}'`);
-    };
+    const getUsers = async () => await database.manyOrNone("select * from user_signup");
 
-    const getPassword = async (user) => {
-        await database.oneOrNone(`select password from user_signup where email = '${user.email}'`);
-    };
+    const checkEmail = async (email) => await database.oneOrNone(`select * from user_signup where email = '${email}'`);
+
+    const getPassword = async (user) => await database.oneOrNone(`select password from user_signup where email = '${user.email}'`);
 
     return {
         createUser,
+        getUsers,
         checkEmail,
         getPassword
     };
