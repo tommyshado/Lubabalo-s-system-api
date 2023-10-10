@@ -30,7 +30,7 @@ router.get("/username/:username", async (req, res) => {
     };
 });
 
-router.post("/username/:username/shoeId/:shoeId", async (req, res) => {
+router.post("/username/:username/shoeId/:shoeId/add", async (req, res) => {
     try {
         const data = {
             shoeId: req.params.shoeId,
@@ -38,6 +38,27 @@ router.post("/username/:username/shoeId/:shoeId", async (req, res) => {
         };
         // Adding to the cart
         await ShoppingCart.addToCart(data);
+
+        res.json({
+            status: "success"
+        })
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        })
+    };
+});
+
+router.post("/username/:username/shoeId/:shoeId/remove", async (req, res) => {
+    try {
+        const data = {
+            shoeId: req.params.shoeId,
+            username: req.params.username
+        };
+        // Removing from the cart
+        await ShoppingCart.removeFromCart(data);
 
         res.json({
             status: "success"
