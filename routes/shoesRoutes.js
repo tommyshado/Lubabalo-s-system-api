@@ -84,11 +84,10 @@ router.get("/brand/:brandname/size/:size", async (req, res) => {
 router.post("/brand/shoes/sold/updateInventory/:id", async (req, res) => {
     try {
         // DECREASE the stock levels by one
-        const updatedQty = await ShoesService.updateInventory(req.params.id);
+        await ShoesService.updateInventory(req.params.id);
 
         res.status(200).json({
-            status: "success",
-            data: updatedQty
+            status: "success"
         });
         
     } catch (err) {
@@ -102,11 +101,10 @@ router.post("/brand/shoes/sold/updateInventory/:id", async (req, res) => {
 router.post("/brand/shoes/sold/:id", async (req, res) => {
     try {
         // DELETE a shoe
-        const updatedQty = await ShoesService.deleteShoe(req.params.id);
+        await ShoesService.deleteShoe(req.params.id);
 
         res.status(200).json({
-            status: "success",
-            data: updatedQty
+            status: "success"
         });
         
     } catch (err) {
@@ -127,11 +125,10 @@ router.post("/", async (req, res) => {
             shoeColor: req.body.shoeColor,
             shoeSize: req.body.shoeSize
         };
-        const insertedShoe = await ShoesService.insertShoe(createShoe);
+        await ShoesService.insertShoe(createShoe);
 
         res.status(200).json({
-            status: "success",
-            data: insertedShoe
+            status: "success"
         });
         
     } catch (err) {
