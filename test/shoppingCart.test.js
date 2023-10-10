@@ -60,29 +60,49 @@ describe("shopping cart unit testing", function () {
             );
 
             // signing up users
-            let user = [
-                "tommyshado",
-                "12345",
-                "mthunzitom.10@gmail.com"
-            ];
+            let user = ["tommyshado", "12345", "mthunzitom.10@gmail.com"];
             // Hash password
             const salt = 10;
             const hashedPassword = await bcrypt.hash(user[1], salt);
             user[1] = hashedPassword;
             // INSERT user into the user_signup database
-            await database.none("insert into user_signup (username, password, email) values ($1, $2, $3)", user);
+            await database.none(
+                "insert into user_signup (username, password, email) values ($1, $2, $3)",
+                user
+            );
         } catch (error) {
             console.log(error);
             throw error;
         }
     });
 
-    it("should be able to get a shopping cart for a username", async () => { });
-    // should be able to retrieve a shopping cart for a username
+    it("should be able to add and retrieve a shoe from the shopping cart", async () => {
+        const data = {
+            username: "tommyshado",
+            // shoe_id for samba black adidas
+            shoeId: "1",
+            // qty
+            qty: "2",
+        };
+        // Add to cart
+        await ShoppingCart.addToCart(data);
+        
+        assert.deepEqual(
+            [
+                {
+                    cart_id: 1,
+                    quantity: "2",
+                    shoe_id: 1,
+                    username: "tommyshado",
+                },
+            ],
+            await ShoppingCart.getCart()
+        );
+    });
 
-    // should be able to add a shoe to the shopping cart
+    // it("should be able to remove a shoe from the shopping cart", async () => {
 
-    // should be able to remove a shoe from the shopping cart
+    // });
 
     // should be able to calculate the overall total of shoes for a username
 
