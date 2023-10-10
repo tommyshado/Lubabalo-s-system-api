@@ -2,7 +2,7 @@
 
 const shoesService = database => {
     // CREATE a function that gets all the available shoes from the database
-    const getShoes = async () => await database.manyOrNone("select * from stock_inventory");
+    const getShoes = async () => await database.manyOrNone("select * from stock_inventory order by shoe_name");
 
     // CREATE a function that takes in an object of { shoeName, qty, shoePrice, shoeColor },
         // which comes from the adding of a new shoe page req.body AND...
