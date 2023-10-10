@@ -59,7 +59,7 @@ describe("shopping cart unit testing", function () {
                 data[1]
             );
 
-            // signing up users
+            // signing up a user
             let user = ["tommyshado", "12345", "mthunzitom.10@gmail.com"];
             // Hash password
             const salt = 10;
@@ -70,39 +70,66 @@ describe("shopping cart unit testing", function () {
                 "insert into user_signup (username, password, email) values ($1, $2, $3)",
                 user
             );
+
+            // signing up another user
+            let user__ = ["tendani", "1234", "tendani@gmail.com"];
+            // Hash password
+            const salt__ = 10;
+            const hashedPassword__ = await bcrypt.hash(user[1], salt__);
+            user__[1] = hashedPassword__;
+            // INSERT user into the user_signup database
+            await database.none(
+                "insert into user_signup (username, password, email) values ($1, $2, $3)",
+                user__
+            );
         } catch (error) {
             console.log(error);
             throw error;
         }
     });
 
-    it("should be able to add and retrieve a shoe from the shopping cart", async () => {
+    it("should be able to get a shoe from the cart", async () => {
         const data = {
             username: "tommyshado",
             // shoe_id for samba black adidas
             shoeId: "1",
             // qty
-            qty: "2",
+            qty: "1",
         };
         // Add to cart
         await ShoppingCart.addToCart(data);
-        
+        // GET shopping cart
+        const cart = await ShoppingCart.getCart(data);
+
         assert.deepEqual(
             [
                 {
                     cart_id: 1,
-                    quantity: "2",
+                    quantity: "1",
                     shoe_id: 1,
                     username: "tommyshado",
                 },
             ],
-            await ShoppingCart.getCart()
+            cart
         );
     });
 
-    // it("should be able to remove a shoe from the shopping cart", async () => {
+    it("should be able to remove a shoe from the cart", async () => {
+        const data = {
+            username: "tendani",
+            shoeId: "2",
+            qty: "1",
+        };
+        // Add to cart
+        await ShoppingCart.addToCart(data);
 
-    // });
+        // Remove shoe from the cart
+        await ShoppingCart.removeFromCart(data);
+        // GET shopping cart
+        const cart = await ShoppingCart.getCart(data);
+
+        assert.deepEqual([], cart);
+    });
 
     // should be able to calculate the overall total of shoes for a username
 
