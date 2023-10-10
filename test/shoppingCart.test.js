@@ -92,9 +92,7 @@ describe("shopping cart unit testing", function () {
         const data = {
             username: "tommyshado",
             // shoe_id for samba black adidas
-            shoeId: "1",
-            // qty
-            qty: "1",
+            shoeId: "1"
         };
         // Add to cart
         await ShoppingCart.addToCart(data);
@@ -117,8 +115,7 @@ describe("shopping cart unit testing", function () {
     it("should be able to remove a shoe from the cart", async () => {
         const data = {
             username: "tendani",
-            shoeId: "2",
-            qty: "1",
+            shoeId: "2"
         };
         // Add to cart
         await ShoppingCart.addToCart(data);
