@@ -40,6 +40,25 @@ const shoesService = database => {
     const getShoeBySizeAndBrand = async (shoe) => await database.manyOrNone(`select * from stock_inventory where shoe_size = '${shoe.shoeSize}' and shoe_name = '${shoe.shoeName}'`);
         // RETURN all the shoes for a given brand and size
 
+    const filterByColor = async (color) => await database.manyOrNone(`select * from stock_inventory where shoe_color = '${color}'`);
+
+    const filterByColorAndBrand = async (filtered) => {
+        const data = [
+            filtered.shoeName,
+            filtered.shoeColor
+        ]
+        return await database.oneOrNone(`select * from stock_inventory where shoe_name = $1 and shoe_color = $2`, data);
+    };
+
+    const filterByColorBrandAndSize = async (filtered) => {
+        const data = [
+            filtered.shoeName,
+            filtered.shoeColor,
+            filtered.shoeSize
+        ]
+        return await database.oneOrNone(`select * from stock_inventory where shoe_name = $1 and shoe_color = $2 and shoe_size = $3`, data);
+    };
+
     return {
         getShoes,
         insertShoe,
@@ -47,7 +66,10 @@ const shoesService = database => {
         deleteShoe,
         getShoeBrand,
         getShoeBySize,
-        getShoeBySizeAndBrand
+        getShoeBySizeAndBrand,
+        filterByColor,
+        filterByColorAndBrand,
+        filterByColorBrandAndSize
     }
 };
 
