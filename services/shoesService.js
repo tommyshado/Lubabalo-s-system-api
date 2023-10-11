@@ -11,13 +11,15 @@ const shoesService = database => {
     const insertShoe = async (shoe) => {
         const data = [
             shoe.shoeName,
+            shoe.shoeDescription,
+            shoe.ageGroup,
             shoe.image,
             shoe.qty,
             shoe.shoePrice,
             shoe.shoeColor,
             shoe.shoeSize
         ];
-        await database.none("insert into stock_inventory (shoe_name, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6)", data);
+        await database.none("insert into stock_inventory (shoe_name, description, people, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6, $7, $8)", data);
     };
 
     // CREATE a function that takes in an id as params and delete a shoe from the database using the given id FIRST...

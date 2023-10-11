@@ -125,7 +125,9 @@ router.post("/", async (req, res) => {
             qty: req.body.qty,
             shoePrice: req.body.shoePrice,
             shoeColor: req.body.shoeColor,
-            shoeSize: req.body.shoeSize
+            shoeSize: req.body.shoeSize,
+            shoeDescription: req.body.description,
+            ageGroup: req.body.ageGroup
         };
         await ShoesService.insertShoe(createShoe);
 
