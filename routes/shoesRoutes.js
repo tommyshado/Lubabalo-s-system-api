@@ -7,6 +7,8 @@ const ShoesService = shoesService(database);
 // Router instance
 const router = Router();
 
+
+// Filtering using brand name and sizes
 router.get("/", async (req, res) => {
     try {
         // GET all the available shoes
@@ -136,6 +138,68 @@ router.post("/", async (req, res) => {
             status: "error",
             error: err.stack
         });
+    };
+});
+
+// Filtering with colors, brand names and sizes
+router.get("/brand/color/:color", async (req, res) => {
+    try {
+        const shoeColor = req.params.color;
+        const filtered = await ShoesService.filterByColor(shoeColor);
+
+        res.json({
+            status: "success",
+            data: filtered
+        })
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        })
+    };
+});
+
+router.get("/brand/:brandname/color/:color", async (req, res) => {
+    try {
+        const data = {
+            shoeName: req.params.brandname,
+            shoeColor: req.params.color,
+        }
+        const filtered = await ShoesService.filterByColorAndBrand(data);
+
+        res.json({
+            status: "success",
+            data: filtered
+        })
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        })
+    };
+});
+
+router.get("/brand/:brandname/color/:color/size/:size", async (req, res) => {
+    try {
+        const data = {
+            shoeName: req.params.brandname,
+            shoeColor: req.params.color,
+            shoeSize: req.params.size
+        }
+        const filtered = await ShoesService.filterByColorBrandAndSize(data);
+
+        res.json({
+            status: "success",
+            data: filtered
+        })
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        })
     };
 });
 
