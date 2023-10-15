@@ -121,13 +121,13 @@ router.post("/", async (req, res) => {
     try {
         const createShoe = {
             shoeName: req.body.shoeName,
+            shoeDescription: req.body.description,
+            ageGroup: req.body.ageGroup,
             image: req.body.image,
             qty: req.body.qty,
             shoePrice: req.body.shoePrice,
             shoeColor: req.body.shoeColor,
             shoeSize: req.body.shoeSize,
-            shoeDescription: req.body.description,
-            ageGroup: req.body.ageGroup
         };
         await ShoesService.insertShoe(createShoe);
 
