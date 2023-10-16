@@ -121,7 +121,7 @@ router.post("/", async (req, res) => {
     try {
         const createShoe = {
             shoeName: req.body.shoeName,
-            shoeDescription: req.body.description,
+            description: req.body.description,
             ageGroup: req.body.ageGroup,
             image: req.body.image,
             qty: req.body.qty,

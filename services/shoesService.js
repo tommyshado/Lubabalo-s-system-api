@@ -11,7 +11,7 @@ const shoesService = database => {
     const insertShoe = async (shoe) => {
         const data = [
             shoe.shoeName,
-            shoe.shoeDescription,
+            shoe.description,
             shoe.ageGroup,
             shoe.image,
             shoe.qty,
