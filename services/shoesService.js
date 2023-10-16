@@ -19,7 +19,7 @@ const shoesService = database => {
             shoe.shoeColor,
             shoe.shoeSize
         ];
-        await database.none("insert into stock_inventory (shoe_name, description, people, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6, $7, $8)", data);
+        await database.none("insert into stock_inventory (shoe_name, description, catagory, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6, $7, $8)", data);
     };
 
     // CREATE a function that takes in an id as params and delete a shoe from the database using the given id FIRST...
@@ -61,11 +61,11 @@ const shoesService = database => {
         return await database.oneOrNone(`select * from stock_inventory where shoe_name = $1 and shoe_color = $2 and shoe_size = $3`, data);
     };
 
-    const getMenShoes = async (catagory) => await database.manyOrNone(`select * from stock_inventory where people = '${catagory.men}'`);
+    const getMenShoes = async (catagory) => await database.manyOrNone(`select * from stock_inventory where catagory = '${catagory.men}'`);
 
-    const getWomenShoes = async (catagory) => await database.manyOrNone(`select * from stock_inventory where people = '${catagory.women}'`);
+    const getWomenShoes = async (catagory) => await database.manyOrNone(`select * from stock_inventory where catagory = '${catagory.women}'`);
 
-    const getKidsShoes = async (catagory) => await database.manyOrNone(`select * from stock_inventory where people = '${catagory.kids}'`);
+    const getKidsShoes = async (catagory) => await database.manyOrNone(`select * from stock_inventory where catagory = '${catagory.kids}'`);
 
     return {
         getShoes,

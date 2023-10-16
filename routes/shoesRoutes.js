@@ -211,7 +211,6 @@ router.get("/brand/catagory/:men", async (req, res) => {
             men: req.params.men
         };
         const filtered = await ShoesService.getMenShoes(catagory);
-        console.log(filtered)
 
         res.json({
             status: "success",
@@ -232,7 +231,6 @@ router.get("/brand/catagory/:women", async (req, res) => {
             women: req.params.women
         };
         const filtered = await ShoesService.getWomenShoes(catagory);
-        console.log(filtered)
 
         res.json({
             status: "success",
@@ -253,7 +251,6 @@ router.get("/brand/catagory/:kids", async (req, res) => {
             kids: req.params.kids
         };
         const filtered = await ShoesService.getKidsShoes(catagory);
-        console.log(filtered)
 
         res.json({
             status: "success",

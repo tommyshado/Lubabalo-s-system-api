@@ -54,6 +54,7 @@ describe("shoes service testing", function () {
                 shoePrice: 2599.0,
                 shoeColor: "white",
                 shoeSize: 8,
+                description: "Samba original og"
             };
             await ShoesService.insertShoe(data);
 
@@ -66,6 +67,7 @@ describe("shoes service testing", function () {
                 shoePrice: 1799.0,
                 shoeColor: "white",
                 shoeSize: 7,
+                description: "Samba original og"
             };
             // INSERTING values into the database
             await ShoesService.insertShoe(data__);
@@ -236,6 +238,8 @@ describe("shoes service testing", function () {
             shoePrice: 2199.0,
             shoeColor: "white",
             shoeSize: 9,
+            description: "air force 1",
+            ageGroup: "men"
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data);
@@ -249,6 +253,8 @@ describe("shoes service testing", function () {
             shoePrice: 1499.0,
             shoeColor: "white",
             shoeSize: 9,
+            description: "all star",
+            ageGroup: "women"
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data__);
@@ -267,6 +273,8 @@ describe("shoes service testing", function () {
             shoePrice: 2199.0,
             shoeColor: "white",
             shoeSize: 9,
+            description: "air force 1",
+            ageGroup: "men"
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data);
@@ -280,6 +288,8 @@ describe("shoes service testing", function () {
             shoePrice: 1399.0,
             shoeColor: "purple",
             shoeSize: 3,
+            ageGroup: "women",
+            description: "ASICS Gel-Lyte III"
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data__);
@@ -293,6 +303,8 @@ describe("shoes service testing", function () {
                     shoe_price: "2199",
                     shoe_color: "white",
                     shoe_size: "9",
+                    description: "air force 1",
+                    catagory: "men",
                     image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/3c0-Nike-Air-Force-1-Tripple-White-CW2288-111-side-f5b.jpg",
                 },
             ],
@@ -309,6 +321,8 @@ describe("shoes service testing", function () {
             shoePrice: 2199.0,
             shoeColor: "white",
             shoeSize: 9,
+            ageGroup: "men",
+            description: "air force 1"
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data);
@@ -321,6 +335,8 @@ describe("shoes service testing", function () {
             shoePrice: 1399.0,
             shoeColor: "purple",
             shoeSize: 3,
+            ageGroup: "women",
+            description: "ASICS Gel-Lyte III"
         };
         await ShoesService.insertShoe(data__);
 
@@ -331,7 +347,9 @@ describe("shoes service testing", function () {
             qty: 1,
             shoePrice: 2199.0,
             shoeColor: "white",
+            ageGroup: "women",
             shoeSize: 9,
+            description: "ASICS Gel-Lyte III"
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data___);
@@ -349,6 +367,8 @@ describe("shoes service testing", function () {
                 shoe_price: "1399",
                 shoe_color: "purple",
                 shoe_size: "3",
+                catagory: "women",
+                description: "ASICS Gel-Lyte III",
                 image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/4bc-ASICS-1201A582-700-GEL-LYTE-III-OG-BARELY-ROSE-side-b1c.jpg",
             },
             filteredByColorAndBrand
@@ -362,7 +382,9 @@ describe("shoes service testing", function () {
             qty: 2,
             shoePrice: 1399.0,
             shoeColor: "purple",
+            ageGroup: "women",
             shoeSize: 3,
+            description: "ASICS Gel-Lyte III"
         };
         await ShoesService.insertShoe(data);
 
@@ -372,8 +394,10 @@ describe("shoes service testing", function () {
             image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/3c0-Nike-Air-Force-1-Tripple-White-CW2288-111-side-f5b.jpg",
             qty: 1,
             shoePrice: 2199.0,
+            ageGroup: "men",
             shoeColor: "white",
             shoeSize: 9,
+            description: "air force 1"
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data___);
@@ -393,7 +417,9 @@ describe("shoes service testing", function () {
                 shoe_qty: "1",
                 shoe_price: "2199",
                 shoe_color: "white",
+                catagory: "men",
                 shoe_size: "9",
+                description: "air force 1",
                 image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/3c0-Nike-Air-Force-1-Tripple-White-CW2288-111-side-f5b.jpg",
             },
             filteredByColorBrandAndSize
