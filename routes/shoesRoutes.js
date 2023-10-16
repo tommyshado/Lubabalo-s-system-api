@@ -205,4 +205,67 @@ router.get("/brand/:brandname/color/:color/size/:size", async (req, res) => {
     };
 });
 
+router.get("/brand/catagory/:men", async (req, res) => {
+    try {
+        const catagory = {
+            men: req.params.men
+        };
+        const filtered = await ShoesService.getMenShoes(catagory);
+        console.log(filtered)
+
+        res.json({
+            status: "success",
+            data: filtered
+        });
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        })
+    };
+});
+
+router.get("/brand/catagory/:women", async (req, res) => {
+    try {
+        const catagory = {
+            women: req.params.women
+        };
+        const filtered = await ShoesService.getWomenShoes(catagory);
+        console.log(filtered)
+
+        res.json({
+            status: "success",
+            data: filtered
+        });
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        })
+    };
+});
+
+router.get("/brand/catagory/:kids", async (req, res) => {
+    try {
+        const catagory = {
+            kids: req.params.kids
+        };
+        const filtered = await ShoesService.getKidsShoes(catagory);
+        console.log(filtered)
+
+        res.json({
+            status: "success",
+            data: filtered
+        });
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        })
+    };
+});
+
 export default router;

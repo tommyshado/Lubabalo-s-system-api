@@ -61,6 +61,12 @@ const shoesService = database => {
         return await database.oneOrNone(`select * from stock_inventory where shoe_name = $1 and shoe_color = $2 and shoe_size = $3`, data);
     };
 
+    const getMenShoes = async (catagory) => await database.manyOrNone(`select * from stock_inventory where people = '${catagory.men}'`);
+
+    const getWomenShoes = async (catagory) => await database.manyOrNone(`select * from stock_inventory where people = '${catagory.women}'`);
+
+    const getKidsShoes = async (catagory) => await database.manyOrNone(`select * from stock_inventory where people = '${catagory.kids}'`);
+
     return {
         getShoes,
         insertShoe,
@@ -71,7 +77,10 @@ const shoesService = database => {
         getShoeBySizeAndBrand,
         filterByColor,
         filterByColorAndBrand,
-        filterByColorBrandAndSize
+        filterByColorBrandAndSize,
+        getMenShoes,
+        getWomenShoes,
+        getKidsShoes
     }
 };
 
