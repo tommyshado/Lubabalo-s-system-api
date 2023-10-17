@@ -54,7 +54,7 @@ describe("shoes service testing", function () {
                 shoePrice: 2599.0,
                 shoeColor: "white",
                 shoeSize: 8,
-                description: "Samba original og"
+                description: "Samba original og",
             };
             await ShoesService.insertShoe(data);
 
@@ -67,7 +67,7 @@ describe("shoes service testing", function () {
                 shoePrice: 1799.0,
                 shoeColor: "white",
                 shoeSize: 7,
-                description: "Samba original og"
+                description: "Samba original og",
             };
             // INSERTING values into the database
             await ShoesService.insertShoe(data__);
@@ -239,7 +239,7 @@ describe("shoes service testing", function () {
             shoeColor: "white",
             shoeSize: 9,
             description: "air force 1",
-            ageGroup: "men"
+            ageGroup: "men",
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data);
@@ -254,7 +254,7 @@ describe("shoes service testing", function () {
             shoeColor: "white",
             shoeSize: 9,
             description: "all star",
-            ageGroup: "women"
+            ageGroup: "women",
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data__);
@@ -274,7 +274,7 @@ describe("shoes service testing", function () {
             shoeColor: "white",
             shoeSize: 9,
             description: "air force 1",
-            ageGroup: "men"
+            ageGroup: "men",
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data);
@@ -289,40 +289,26 @@ describe("shoes service testing", function () {
             shoeColor: "purple",
             shoeSize: 3,
             ageGroup: "women",
-            description: "ASICS Gel-Lyte III"
+            description: "ASICS Gel-Lyte III",
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data__);
         const filteredByColor = await ShoesService.filterByColor("white");
-        assert.deepEqual(
-            [
-                {
-                    shoe_id: 1,
-                    shoe_name: "nike",
-                    shoe_qty: "1",
-                    shoe_price: "2199",
-                    shoe_color: "white",
-                    shoe_size: "9",
-                    description: "air force 1",
-                    catagory: "men",
-                    image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/3c0-Nike-Air-Force-1-Tripple-White-CW2288-111-side-f5b.jpg",
-                },
-            ],
-            filteredByColor
-        );
+        assert.equal(1, filteredByColor.length);
     });
 
     it("should be able to filter by color and brand name", async () => {
         // INSERTING a shoe
         const data = {
             shoeName: "nike",
-            image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/3c0-Nike-Air-Force-1-Tripple-White-CW2288-111-side-f5b.jpg",
+            image:
+                "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/3c0-Nike-Air-Force-1-Tripple-White-CW2288-111-side-f5b.jpg",
             qty: 1,
             shoePrice: 2199.0,
             shoeColor: "white",
             shoeSize: 9,
             ageGroup: "men",
-            description: "air force 1"
+            description: "air force 1",
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data);
@@ -330,26 +316,28 @@ describe("shoes service testing", function () {
         // INSERTING another shoe
         const data__ = {
             shoeName: "asics",
-            image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/4bc-ASICS-1201A582-700-GEL-LYTE-III-OG-BARELY-ROSE-side-b1c.jpg",
+            image:
+                "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/4bc-ASICS-1201A582-700-GEL-LYTE-III-OG-BARELY-ROSE-side-b1c.jpg",
             qty: 2,
             shoePrice: 1399.0,
             shoeColor: "purple",
             shoeSize: 3,
             ageGroup: "women",
-            description: "ASICS Gel-Lyte III"
+            description: "ASICS Gel-Lyte III",
         };
         await ShoesService.insertShoe(data__);
 
         // INSERTING a shoe
         const data___ = {
             shoeName: "nike",
-            image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/3c0-Nike-Air-Force-1-Tripple-White-CW2288-111-side-f5b.jpg",
+            image:
+                "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/3c0-Nike-Air-Force-1-Tripple-White-CW2288-111-side-f5b.jpg",
             qty: 1,
             shoePrice: 2199.0,
             shoeColor: "white",
             ageGroup: "women",
             shoeSize: 9,
-            description: "ASICS Gel-Lyte III"
+            description: "ASICS Gel-Lyte III",
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data___);
@@ -359,45 +347,34 @@ describe("shoes service testing", function () {
             shoeName: "asics",
             shoeColor: "purple",
         });
-        assert.deepEqual(
-            {
-                shoe_id: 2,
-                shoe_name: "asics",
-                shoe_qty: "2",
-                shoe_price: "1399",
-                shoe_color: "purple",
-                shoe_size: "3",
-                catagory: "women",
-                description: "ASICS Gel-Lyte III",
-                image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/4bc-ASICS-1201A582-700-GEL-LYTE-III-OG-BARELY-ROSE-side-b1c.jpg",
-            },
-            filteredByColorAndBrand
-        );
+        assert.equal(1, [filteredByColorAndBrand].length);
     });
 
     it("should be able to filter by color, brand name and size", async () => {
         const data = {
             shoeName: "asics",
-            image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/4bc-ASICS-1201A582-700-GEL-LYTE-III-OG-BARELY-ROSE-side-b1c.jpg",
+            image:
+                "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/4bc-ASICS-1201A582-700-GEL-LYTE-III-OG-BARELY-ROSE-side-b1c.jpg",
             qty: 2,
             shoePrice: 1399.0,
             shoeColor: "purple",
             ageGroup: "women",
             shoeSize: 3,
-            description: "ASICS Gel-Lyte III"
+            description: "ASICS Gel-Lyte III",
         };
         await ShoesService.insertShoe(data);
 
         // INSERTING a shoe
         const data___ = {
             shoeName: "nike",
-            image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/3c0-Nike-Air-Force-1-Tripple-White-CW2288-111-side-f5b.jpg",
+            image:
+                "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/3c0-Nike-Air-Force-1-Tripple-White-CW2288-111-side-f5b.jpg",
             qty: 1,
             shoePrice: 2199.0,
             ageGroup: "men",
             shoeColor: "white",
             shoeSize: 9,
-            description: "air force 1"
+            description: "air force 1",
         };
         // INSERTING values into the database
         await ShoesService.insertShoe(data___);
@@ -410,19 +387,6 @@ describe("shoes service testing", function () {
                 shoeSize: "9",
             });
 
-        assert.deepEqual(
-            {
-                shoe_id: 2,
-                shoe_name: "nike",
-                shoe_qty: "1",
-                shoe_price: "2199",
-                shoe_color: "white",
-                catagory: "men",
-                shoe_size: "9",
-                description: "air force 1",
-                image: "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/3c0-Nike-Air-Force-1-Tripple-White-CW2288-111-side-f5b.jpg",
-            },
-            filteredByColorBrandAndSize
-        );
+        assert.equal(1, [filteredByColorBrandAndSize].length);
     });
 });

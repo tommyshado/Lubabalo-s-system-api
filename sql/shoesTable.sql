@@ -11,14 +11,19 @@ create table shoes (
     price int
 )
 
-create table shoe_stock (
-    shoe_id foreign key,
+create table shoes_stock (
+    image text not null,
+    description text not null,
     qty int,
     color text,
     size int,
-    image text not null
-)
+    shoe_id int,
+    foreign key (shoe_id) references shoes(shoe_id) on delete cascade
+);
 
-create table shopping_cart (
-
-)
+CREATE TABLE shopping_cart (
+    cart_id serial PRIMARY KEY,
+    user_id int REFERENCES user_signup(user_id) ON DELETE CASCADE,
+    shoe_id serial REFERENCES shoes(shoe_id) ON DELETE CASCADE,
+    qty numeric not null
+);

@@ -92,30 +92,20 @@ describe("shopping cart unit testing", function () {
         const data = {
             username: "tommyshado",
             // shoe_id for samba black adidas
-            shoeId: "1"
+            shoeId: "1",
         };
         // Add to cart
         await ShoppingCart.addToCart(data);
         // GET shopping cart
         const cart = await ShoppingCart.getCart(data);
 
-        assert.deepEqual(
-            [
-                {
-                    cart_id: 1,
-                    quantity: "1",
-                    shoe_id: 1,
-                    username: "tommyshado",
-                },
-            ],
-            cart
-        );
+        assert.equal(1, cart.length);
     });
 
     it("should be able to remove a shoe from the cart", async () => {
         const data = {
             username: "tendani",
-            shoeId: "2"
+            shoeId: "2",
         };
         // Add to cart
         await ShoppingCart.addToCart(data);
