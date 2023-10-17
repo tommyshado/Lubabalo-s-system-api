@@ -6,9 +6,9 @@ import bodyParser from "body-parser";
 import cors from "cors";
 
 // Routes imports
-import shoesRoutes from "./routes/shoesRoutes.js";
-import cart from "./routes/cart.js";
-import authRouter from "./routes/auth.js"
+import shoesRoutes from "./api/shoesRoutes.js";
+import cart from "./api/cart.js";
+import authRouter from "./api/auth.js"
 
 const app = express();
 

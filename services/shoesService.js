@@ -24,7 +24,7 @@ const shoesService = database => {
 
     // CREATE a function that takes in an id as params and delete a shoe from the database using the given id FIRST...
     const updateInventory = async (shoeId) => {
-        await database.none(`update stock_inventory set shoe_qty = shoe_qty - 1 where shoe_id = ${shoeId} and shoe_qty > 0`);
+        await database.oneOrNone(`update stock_inventory set shoe_qty = shoe_qty - 1 where shoe_id = ${shoeId} and shoe_qty > 0 RETURNING shoe_id`);
     };
 
     // CREATE a function to DELETE a shoe from the shoes database using a given shoe_id

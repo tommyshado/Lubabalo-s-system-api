@@ -26,10 +26,13 @@ router.get("/", async (req, res) => {
     };
 });
 
-router.get("/brand/:brandname", async (req, res) => {
+router.post("/brand/:brandname", async (req, res) => {
     try {
-        const nameOfBrand = req.params.brandname;
+        const nameOfBrand = req.body.brandname;
+        // Add the request from the body in the params
+        req.params.brandname = nameOfBrand;
         const filteredByBrand = await ShoesService.getShoeBrand(nameOfBrand);
+
         res.status(200).json({
             status: "success",
             data: filteredByBrand
