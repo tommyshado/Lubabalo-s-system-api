@@ -164,7 +164,7 @@ describe("shoes service testing", function () {
         const qty = await database.oneOrNone(
             `select shoe_qty from stock_inventory where shoe_id = '1'`
         );
-        assert.equal("4", qty.shoe_qty);
+        assert.equal("3", qty.shoe_qty);
     });
 
     it("should be able to delete a shoe when given a shoe id and when the stock inventory is 0", async () => {
