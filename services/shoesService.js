@@ -27,6 +27,10 @@ const shoesService = database => {
         await database.oneOrNone(`update stock_inventory set shoe_qty = shoe_qty - 1 where shoe_id = ${shoeId} and shoe_qty > 0 RETURNING shoe_id`);
     };
 
+    const increaseInventory = async (shoeId) => {
+        await database.none(`update stock_inventory set shoe_qty = shoe_qty + 1 where shoe_id = ${shoeId}`);
+    };
+
     // CREATE a function to DELETE a shoe from the shoes database using a given shoe_id
     const deleteShoe = async (shoeId) => await database.oneOrNone(`delete from stock_inventory where shoe_id = ${shoeId} and shoe_qty = 0`);
 
@@ -71,6 +75,7 @@ const shoesService = database => {
         getShoes,
         insertShoe,
         updateInventory,
+        increaseInventory,
         deleteShoe,
         getShoeBrand,
         getShoeBySize,
