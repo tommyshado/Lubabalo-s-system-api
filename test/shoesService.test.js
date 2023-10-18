@@ -123,7 +123,7 @@ describe("shoes service testing", function () {
         }
     });
 
-    it("should be able to decrease the inventory of shoes when given a shoe id", async () => {
+    it("should be able to decrease the quantity of shoes when given a shoe id", async () => {
         // INSERTING a shoe
         const data = {
             shoeName: "nike",
@@ -143,6 +143,28 @@ describe("shoes service testing", function () {
             `select shoe_qty from stock_inventory where shoe_id = '1'`
         );
         assert.equal("0", qty.shoe_qty);
+    });
+
+    it("should be able to increase the quantity of shoes when given a shoe id", async () => {
+        // INSERTING a shoe
+        const data = {
+            shoeName: "nike",
+            image:
+                "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/3c0-Nike-Air-Force-1-Tripple-White-CW2288-111-side-f5b.jpg",
+            qty: 2,
+            shoePrice: 2099.0,
+            shoeColor: "white",
+            shoeSize: 9,
+        };
+        // INSERTING values into the database
+        await ShoesService.insertShoe(data);
+        // takes in an id from the shoeId global variable
+        await ShoesService.increaseInventory(1);
+        // GET the shoe quantity
+        const qty = await database.oneOrNone(
+            `select shoe_qty from stock_inventory where shoe_id = '1'`
+        );
+        assert.equal("4", qty.shoe_qty);
     });
 
     it("should be able to delete a shoe when given a shoe id and when the stock inventory is 0", async () => {
