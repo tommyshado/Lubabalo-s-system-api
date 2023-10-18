@@ -101,6 +101,23 @@ router.post("/brand/shoes/sold/updateInventory/:id", async (req, res) => {
     };
 });
 
+router.post("/brand/shoes/remove/increaseQuantity/:id", async (req, res) => {
+    try {
+        // Increase the stock levels by one
+        await ShoesService.increaseInventory(req.params.id);
+
+        res.status(200).json({
+            status: "success"
+        });
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        });
+    };
+});
+
 router.post("/brand/shoes/sold/:id", async (req, res) => {
     try {
         // DELETE a shoe
