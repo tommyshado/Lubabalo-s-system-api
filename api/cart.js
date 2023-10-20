@@ -23,12 +23,14 @@ router.get("/username/:username", async (req, res) => {
             error: "Not registered in the registrations page"
         });
         const cart = await ShoppingCart.getCart(data);
+        const shoeTotal = await ShoppingCart.getShoePrice(data);
 
         res.json({
             status: "success",
-            cart: cart
+            cart: cart,
+            total: shoeTotal
         })
-        
+
     } catch (err) {
         res.json({
             status: "error",
@@ -54,7 +56,7 @@ router.post("/username/:username/shoeId/:shoeId/add", async (req, res) => {
         res.json({
             status: "success"
         })
-        
+
     } catch (err) {
         res.json({
             status: "error",
@@ -80,11 +82,39 @@ router.post("/username/:username/shoeId/:shoeId/remove", async (req, res) => {
         res.json({
             status: "success"
         })
-        
+
     } catch (err) {
         res.json({
             status: "error",
             error: err.stack
+        })
+    };
+});
+
+router.post("/username/:username/payment", async (req, res) => {
+    try {
+        const payment = req.body;
+        const data = {
+            username: req.params.username
+        };
+        const shoeTotal = await ShoppingCart.getShoePrice(data);
+        const checkPayment = payment.payment >= shoeTotal;
+
+        if (!checkPayment) return res.json({
+            status: "error",
+            error: "Insufficient payment"
+        });
+
+        // Remove all from the cart
+        await ShoppingCart.removeAll(data);
+        res.json({
+            status: "success"
+        });
+
+    } catch (err) {
+        res.json({
+            status: "error",
+            err: err.stack
         })
     };
 });
