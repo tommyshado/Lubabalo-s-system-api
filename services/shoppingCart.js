@@ -1,9 +1,10 @@
 const shoppingCart = (database) => {
-    const getCart = async (data) => {
-        return await database.manyOrNone(
-            `select * from shopping_cart where username = '${data.username}'`
+    const getCart = async (data) => 
+        await database.manyOrNone(
+            `select shoe_name, quantity from stock_inventory 
+             INNER JOIN shopping_cart ON stock_inventory.shoe_id = shopping_cart.shoe_id 
+             where username = '${data.username}'`
         );
-    };
 
     const addToCart = async (data) => {
         const add = [data.username, data.shoeId, 1];
@@ -12,7 +13,6 @@ const shoppingCart = (database) => {
             add
         );
     };
-
     const removeFromCart = async (user) => {
         const data = [user.shoeId, user.username];
         await database.none(
