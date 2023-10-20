@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 
 // Routes imports
-import shoesRoutes from "./api/shoesRoutes.js";
+import shoesRoutes from "./api/shoes.js";
 import cart from "./api/cart.js";
 import authRouter from "./api/auth.js"
 
