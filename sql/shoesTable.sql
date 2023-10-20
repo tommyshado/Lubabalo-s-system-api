@@ -8,12 +8,12 @@ create table user_signup (
 create table shoes (
     shoe_id serial PRIMARY KEY,
     shoe_name text not null,
+    image text not null,
+    description text not null,
     price int
 )
 
 create table shoes_stock (
-    image text not null,
-    description text not null,
     qty int,
     color text,
     size int,

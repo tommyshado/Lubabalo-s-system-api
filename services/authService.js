@@ -12,14 +12,14 @@ const authService = (database) => {
 
     const getUsers = async () => await database.manyOrNone("select * from user_signup");
 
-    const checkEmail = async (email) => await database.oneOrNone(`select * from user_signup where email = '${email}'`);
+    const checkUsername = async (user) => await database.oneOrNone(`select * from user_signup where username = '${user.username}'`);
 
-    const getPassword = async (user) => await database.oneOrNone(`select password from user_signup where email = '${user.email}'`);
+    const getPassword = async (user) => await database.oneOrNone(`select password from user_signup where email = '${user.name}'`);
 
     return {
         createUser,
         getUsers,
-        checkEmail,
+        checkUsername,
         getPassword
     };
 };

@@ -1,9 +1,11 @@
 import shoppingCart from "../services/shoppingCart.js"
 import database from "../model/dbConnection.js";
 import { Router } from "express";
+import authService from "../services/authService.js";
 
 // Service instance
 const ShoppingCart = shoppingCart(database);
+const auth = authService(database);
 // Router instance
 const router = Router();
 
@@ -15,6 +17,11 @@ router.get("/username/:username", async (req, res) => {
         const data = {
             username: req.params.username
         };
+        const checkUsername = await auth.checkUsername(data);
+        if (!checkUsername) return res.json({
+            status: "error",
+            error: "Not registered in the registrations page"
+        });
         const cart = await ShoppingCart.getCart(data);
 
         res.json({
@@ -36,6 +43,11 @@ router.post("/username/:username/shoeId/:shoeId/add", async (req, res) => {
             shoeId: req.params.shoeId,
             username: req.params.username
         };
+        const checkUsername = await auth.checkUsername(data);
+        if (!checkUsername) return res.json({
+            status: "error",
+            error: "Not registered in the registrations page"
+        });
         // Adding to the cart
         await ShoppingCart.addToCart(data);
 
@@ -57,6 +69,11 @@ router.post("/username/:username/shoeId/:shoeId/remove", async (req, res) => {
             shoeId: req.params.shoeId,
             username: req.params.username
         };
+        const checkUsername = await auth.checkUsername(data);
+        if (!checkUsername) return res.json({
+            status: "error",
+            error: "Not registered in the registrations page"
+        });
         // Removing from the cart
         await ShoppingCart.removeFromCart(data);
 
