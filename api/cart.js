@@ -23,12 +23,12 @@ router.get("/username/:username", async (req, res) => {
             error: "Not registered in the registrations page"
         });
         const cart = await ShoppingCart.getCart(data);
-        const shoeTotal = await ShoppingCart.getShoePrice(data);
+        const cartTotal = await ShoppingCart.getCartTotal(data);
 
         res.json({
             status: "success",
             cart: cart,
-            total: shoeTotal
+            total: cartTotal
         })
 
     } catch (err) {
