@@ -1,5 +1,10 @@
+import shoesService from "./shoesService.js";
+
 const shoppingCart = (database) => {
-    const getCart = async (data) => 
+    // Instances of the shoes service
+    const shoes = shoesService(database);
+
+    const getCart = async (data) =>
         await database.manyOrNone(
             `select shoe_name, quantity, shoe_price from stock_inventory 
              INNER JOIN shopping_cart ON stock_inventory.shoe_id = shopping_cart.shoe_id 
@@ -10,8 +15,8 @@ const shoppingCart = (database) => {
         const cart = await getCart(data);
         let shoeTotal = 0;
         for (const addedToCart in cart) {
-            shoeTotal = Number(cart[addedToCart].quantity) * Number(cart[addedToCart].shoe_price);
-        };
+            shoeTotal += Number(cart[addedToCart].quantity) * Number(cart[addedToCart].shoe_price);
+        }
         return shoeTotal;
     };
 
@@ -24,27 +29,53 @@ const shoppingCart = (database) => {
                 "insert into shopping_cart (username, shoe_id, quantity) values ($1, $2, $3)",
                 add
             );
+            // Decrement the stock qty by one
+            await shoes.updateInventory(add[1]);
         } else {
-            await database.none("update shopping_cart set quantity = quantity + 1 where username = $1 and shoe_id = $2", add);
+            await database.none(
+                "update shopping_cart set quantity = quantity + 1 where username = $1 and shoe_id = $2",
+                add
+            );
+            // Decrement the stock qty by one
+            await shoes.updateInventory(add[1]);
         };
     };
-    const addToCartHelper = async (data) => await database.oneOrNone(`select * from shopping_cart where username = '${data.username}' and shoe_id = ${data.shoeId}`);
+    const addToCartHelper = async (data) =>
+        await database.oneOrNone(
+            `select * from shopping_cart where username = '${data.username}' and shoe_id = ${data.shoeId}`
+        );
 
     const removeFromCart = async (user) => {
         const data = [user.shoeId, user.username];
-        await database.none(
-            `delete from shopping_cart where shoe_id = '${data[0]}' and username = '${data[1]}'`
-        );
+        // Delete a shoe when the qty is equal 0
+        const helper = await shoes.deleteShoe(data[0]);
+
+        if (!helper) {
+            const checkShoeQty = await database.oneOrNone(
+                `update shopping_cart set quantity = quantity - 1 where shoe_id = ${data[0]} and username = '${data[1]}' and quantity > 1 RETURNING shoe_id`
+            );
+            if (!checkShoeQty) {
+                await database.none(
+                    `delete from shopping_cart where shoe_id = ${data[0]} and username = '${data[1]}'`
+                );
+            } else {
+                // Increment the qty of the shoe by one
+                await shoes.increaseInventory(data[0]);
+            };
+        };
     };
 
-    const removeAll = async (user) => await database.none(`delete from shopping_cart where username = '${user.username}'`);
+    const removeAll = async (user) =>
+        await database.none(
+            `delete from shopping_cart where username = '${user.username}'`
+        );
 
     return {
         getCart,
         getShoePrice,
         addToCart,
         removeFromCart,
-        removeAll
+        removeAll,
     };
 };
 

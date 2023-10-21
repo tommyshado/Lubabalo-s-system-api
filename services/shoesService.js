@@ -19,12 +19,19 @@ const shoesService = database => {
             shoe.shoeColor,
             shoe.shoeSize
         ];
-        await database.none("insert into stock_inventory (shoe_name, description, catagory, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6, $7, $8)", data);
+        const checkHelper = await insertShoeHelper(shoe);
+
+        if (!checkHelper) {
+            await database.none("insert into stock_inventory (shoe_name, description, catagory, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6, $7, $8)", data);
+        } else {
+            await database.none(`update stock_inventory set shoe_qty = shoe_qty + ${data[4]} where image = '${data[3]}'`);
+        };
     };
+    const insertShoeHelper = async (shoe) => await database.manyOrNone(`select * from stock_inventory where image = '${shoe.image}'`);
 
     // CREATE a function that takes in an id as params and delete a shoe from the database using the given id FIRST...
     const updateInventory = async (shoeId) => {
-        await database.oneOrNone(`update stock_inventory set shoe_qty = shoe_qty - 1 where shoe_id = ${shoeId} and shoe_qty > 0 RETURNING shoe_id`);
+        await database.none(`update stock_inventory set shoe_qty = shoe_qty - 1 where shoe_id = ${shoeId} and shoe_qty > 0`);
     };
 
     const increaseInventory = async (shoeId) => {
@@ -32,7 +39,7 @@ const shoesService = database => {
     };
 
     // CREATE a function to DELETE a shoe from the shoes database using a given shoe_id
-    const deleteShoe = async (shoeId) => await database.oneOrNone(`delete from stock_inventory where shoe_id = ${shoeId} and shoe_qty = 0`);
+    const deleteShoe = async (shoeId) => await database.oneOrNone(`delete from stock_inventory where shoe_id = ${shoeId} and shoe_qty = 0 RETURNING shoe_id`);
 
     // CREATE a function that takes in a brand name which comes from the params AND...
     const getShoeBrand = async (brandname) => await database.manyOrNone(`select * from stock_inventory where shoe_name like '%${brandname}%'`);
