@@ -11,7 +11,7 @@ const shoppingCart = (database) => {
              where username = '${data.username}'`
         );
 
-    const getShoePrice = async (data) => {
+    const getCartTotal = async (data) => {
         const cart = await getCart(data);
         let shoeTotal = 0;
         for (const addedToCart in cart) {
@@ -72,7 +72,7 @@ const shoppingCart = (database) => {
 
     return {
         getCart,
-        getShoePrice,
+        getCartTotal,
         addToCart,
         removeFromCart,
         removeAll,
