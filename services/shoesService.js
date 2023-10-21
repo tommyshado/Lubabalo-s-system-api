@@ -19,9 +19,9 @@ const shoesService = database => {
             shoe.shoeColor,
             shoe.shoeSize
         ];
-        const checkHelper = await insertShoeHelper(shoe);
+        const checkHelper = (await insertShoeHelper(shoe)).length === ([]).length;
 
-        if (!checkHelper) {
+        if (checkHelper) {
             await database.none("insert into stock_inventory (shoe_name, description, catagory, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6, $7, $8)", data);
         } else {
             await database.none(`update stock_inventory set shoe_qty = shoe_qty + ${data[4]} where image = '${data[3]}'`);
