@@ -88,7 +88,7 @@ describe("shopping cart unit testing", function () {
         }
     });
 
-    it("should be able to get a shoe from the cart", async () => {
+    it("should be able to get a cart", async () => {
         const data = {
             username: "tommyshado",
             // shoe_id for samba black adidas
@@ -99,7 +99,7 @@ describe("shopping cart unit testing", function () {
         // GET shopping cart
         const cart = await ShoppingCart.getCart(data);
 
-        assert.equal(1, cart.length);
+        assert.deepEqual([ { shoe_name: 'adidas', quantity: '1', shoe_price: '1799' } ], cart);
     });
 
     it("should be able to remove a shoe from the cart", async () => {
@@ -118,8 +118,70 @@ describe("shopping cart unit testing", function () {
         assert.deepEqual([], cart);
     });
 
-    // should be able to calculate the overall total of shoes for a username
+    it("should be able to calculate the overall total of shoes in the cart", async () => {
+        const data = {
+            username: "tommyshado",
+            // shoe_id for samba black adidas
+            shoeId: "1",
+        };
+        // Add to cart
+        await ShoppingCart.addToCart(data);
+        // Get cart total price
+        const cartTotal = await ShoppingCart.getCartTotal(data);
 
-    // should be able to make a payment by removing a shoe from the shopping cart and...
-    // decrease the number of quantity for the payed shoe
+        assert.equal(1799.00, cartTotal);
+    });
+
+    it("should be able to delete shoes in the cart when a payment is successful", async () => {
+        const data = {
+            username: "tendani",
+            shoeId: "2",
+        };
+        const data__ = {
+            username: "tendani",
+            shoeId: "1",
+        };
+        // Add to cart
+        await ShoppingCart.addToCart(data);
+        // Add to cart again
+        await ShoppingCart.addToCart(data__);
+
+        const cartTotal = await ShoppingCart.getCartTotal(data);
+        const cartTotal__ = await ShoppingCart.getCartTotal(data__);
+
+        // Payment from the user ---> req.body.payment
+        const payment = 8596.00
+        // Check payment
+        const checkPayment = payment >= (cartTotal + cartTotal__);
+        if (checkPayment) await ShoppingCart.removeAll(data);
+
+        // Get cart
+        // Join both arrays
+        const cart = (await ShoppingCart.getCart(data)).concat(await ShoppingCart.getCart(data__));
+
+        assert.deepEqual([], cart);
+    });
+
+    it("should not be able to delete shoes in the cart when a payment is not enough", async () => {
+        const data = {
+            username: "tommyshado",
+            // shoe_id for samba black adidas
+            shoeId: "1",
+        };
+        // Add to cart
+        await ShoppingCart.addToCart(data);
+
+        const cartTotal = await ShoppingCart.getCartTotal(data);
+        // Get payment from the user ---> req.body.payment
+        const payment = 500.00;
+
+        // Check payment
+        const checkPayment = payment >= cartTotal;
+        if (checkPayment) await ShoppingCart.removeAll(data);
+
+        // Get cart
+        const cart = await ShoppingCart.getCart(data);
+
+        assert.equal(1, cart.length);
+    });
 });

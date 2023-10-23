@@ -75,7 +75,30 @@ describe("shoes service testing", function () {
             // GETTING the shoes
             const shoes = await ShoesService.getShoes();
 
-            assert.equal(2, shoes.length);
+            assert.deepEqual([
+                {
+                  shoe_id: 2,
+                  shoe_name: 'adidas',
+                  shoe_qty: '5',
+                  shoe_price: '1799',
+                  shoe_color: 'white',
+                  shoe_size: '7',
+                  image: 'https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/c83-ADIDAS-SAMBA-OG-B75806-side-vJd.jpg',
+                  description: 'Samba original og',
+                  catagory: null
+                },
+                {
+                  shoe_id: 1,
+                  shoe_name: 'new_balance',
+                  shoe_qty: '1',
+                  shoe_price: '2599',
+                  shoe_color: 'white',
+                  shoe_size: '8',
+                  image: 'https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/e0a-NEW-BALANCE-BBW550DY-550-WHITE-side-33p.jpg',
+                  description: 'Samba original og',
+                  catagory: null
+                }
+              ], shoes);
         } catch (error) {
             console.log(error);
             throw error;
@@ -102,6 +125,14 @@ describe("shoes service testing", function () {
                     "white",
                     9,
                 ],
+                [
+                    "nike",
+                    "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/ed1-NIKE-DV0991-101-WMNS-AIR-JORDAN-1-MID-WHITEBLACK-WHITE-side-SbB.jpg",
+                    7,
+                    2499.0,
+                    "white",
+                    9,
+                ],
             ];
             // INSERTING values into the database
             await database.none(
@@ -112,11 +143,15 @@ describe("shoes service testing", function () {
                 "insert into stock_inventory (shoe_name, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6)",
                 data[1]
             );
+            await database.none(
+                "insert into stock_inventory (shoe_name, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6)",
+                data[2]
+            );
 
             // GETTING the shoes
             const shoes = await ShoesService.getShoes();
 
-            assert.equal(2, shoes.length);
+            assert.equal(3, shoes.length);
         } catch (error) {
             console.log(error);
             throw error;
@@ -216,7 +251,20 @@ describe("shoes service testing", function () {
         await ShoesService.insertShoe(data__);
         // takes in a param of brand name
         const filterByBrandName = await ShoesService.getShoeBrand("new_");
-        assert.equal(1, filterByBrandName.length);
+
+        assert.deepEqual([
+            {
+              shoe_id: 1,
+              shoe_name: 'new_balance',
+              shoe_qty: '6',
+              shoe_price: '2499',
+              shoe_color: 'grey',
+              shoe_size: '8',
+              image: 'https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/0f9-NEW-BALANCE-U574KBG-U574-v2-BLACK-side-I45.jpg',
+              description: null,
+              catagory: null
+            }
+          ], filterByBrandName);
     });
 
     it("should be able to filter by shoe size", async () => {
@@ -247,7 +295,20 @@ describe("shoes service testing", function () {
         await ShoesService.insertShoe(data__);
         // takes in a param of brand name
         const filterByBrandName = await ShoesService.getShoeBySize(data__.shoeSize);
-        assert.equal(1, filterByBrandName.length);
+
+        assert.deepEqual([
+            {
+              shoe_id: 2,
+              shoe_name: 'asics',
+              shoe_qty: '2',
+              shoe_price: '1399',
+              shoe_color: 'purple',
+              shoe_size: '3',
+              image: 'https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/4bc-ASICS-1201A582-700-GEL-LYTE-III-OG-BARELY-ROSE-side-b1c.jpg',
+              description: null,
+              catagory: null
+            }
+          ], filterByBrandName);
     });
 
     it("should be able to filter by brand name and size", async () => {
@@ -282,7 +343,20 @@ describe("shoes service testing", function () {
         await ShoesService.insertShoe(data__);
         // takes in a param of brand name
         const filterByBrandName = await ShoesService.getShoeBySizeAndBrand(data__);
-        assert.equal(1, filterByBrandName.length);
+
+        assert.deepEqual([
+            {
+              shoe_id: 2,
+              shoe_name: 'converse',
+              shoe_qty: '3',
+              shoe_price: '1499',
+              shoe_color: 'white',
+              shoe_size: '9',
+              image: 'https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/pics/product/large/162053c-side_1.jpg',
+              description: 'all star',
+              catagory: 'women'
+            }
+          ], filterByBrandName);
     });
 
     it("should be able to filter by color", async () => {
@@ -316,6 +390,7 @@ describe("shoes service testing", function () {
         // INSERTING values into the database
         await ShoesService.insertShoe(data__);
         const filteredByColor = await ShoesService.filterByColor("white");
+
         assert.equal(1, filteredByColor.length);
     });
 
@@ -369,7 +444,17 @@ describe("shoes service testing", function () {
             shoeName: "asics",
             shoeColor: "purple",
         });
-        assert.equal(1, [filteredByColorAndBrand].length);
+        assert.deepEqual({
+            shoe_id: 2,
+            shoe_name: 'asics',
+            shoe_qty: '2',
+            shoe_price: '1399',
+            shoe_color: 'purple',
+            shoe_size: '3',
+            image: 'https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/4bc-ASICS-1201A582-700-GEL-LYTE-III-OG-BARELY-ROSE-side-b1c.jpg',
+            description: 'ASICS Gel-Lyte III',
+            catagory: 'women'
+          }, filteredByColorAndBrand);
     });
 
     it("should be able to filter by color, brand name and size", async () => {
@@ -409,6 +494,16 @@ describe("shoes service testing", function () {
                 shoeSize: "9",
             });
 
-        assert.equal(1, [filteredByColorBrandAndSize].length);
+        assert.deepEqual({
+            shoe_id: 2,
+            shoe_name: 'nike',
+            shoe_qty: '1',
+            shoe_price: '2199',
+            shoe_color: 'white',
+            shoe_size: '9',
+            image: 'https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/3c0-Nike-Air-Force-1-Tripple-White-CW2288-111-side-f5b.jpg',
+            description: 'air force 1',
+            catagory: 'men'
+          }, filteredByColorBrandAndSize);
     });
 });
