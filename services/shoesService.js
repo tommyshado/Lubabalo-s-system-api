@@ -23,10 +23,12 @@ const shoesService = database => {
 
         if (checkHelper) {
             await database.none("insert into stock_inventory (shoe_name, description, catagory, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6, $7, $8)", data);
+
         } else {
             await database.none(`update stock_inventory set shoe_qty = shoe_qty + ${data[4]} where image = '${data[3]}'`);
         };
     };
+
     const insertShoeHelper = async (shoe) => await database.manyOrNone(`select * from stock_inventory where image = '${shoe.image}'`);
 
     // CREATE a function that takes in an id as params and delete a shoe from the database using the given id FIRST...
@@ -59,7 +61,8 @@ const shoesService = database => {
         const data = [
             filtered.shoeName,
             filtered.shoeColor
-        ]
+        ];
+
         return await database.oneOrNone(`select * from stock_inventory where shoe_name = $1 and shoe_color = $2`, data);
     };
 
@@ -68,7 +71,8 @@ const shoesService = database => {
             filtered.shoeName,
             filtered.shoeColor,
             filtered.shoeSize
-        ]
+        ];
+
         return await database.oneOrNone(`select * from stock_inventory where shoe_name = $1 and shoe_color = $2 and shoe_size = $3`, data);
     };
 

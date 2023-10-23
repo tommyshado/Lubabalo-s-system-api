@@ -13,6 +13,7 @@ router.get("/", async (req, res) => {
     try {
         // GET all the available shoes
         const shoes = await ShoesService.getShoes();
+
         res.status(200).json({
             status: "success",
             data: shoes
@@ -49,6 +50,7 @@ router.get("/brand/size/:size", async (req, res) => {
     try {
         const shoeSize = req.params.size;
         const filteredBySize = await ShoesService.getShoeBySize(shoeSize);
+
         res.status(200).json({
             status: "success",
             data: filteredBySize
@@ -70,6 +72,7 @@ router.get("/brand/:brandname/size/:size", async (req, res) => {
             shoeName: req.params.brandname
         };
         const getFiltered = await ShoesService.getShoeBySizeAndBrand(data);
+
         res.status(200).json({
             status: "success",
             data: getFiltered
