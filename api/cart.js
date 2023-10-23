@@ -2,6 +2,7 @@ import shoppingCart from "../services/shoppingCart.js"
 import database from "../model/dbConnection.js";
 import { Router } from "express";
 import authService from "../services/authService.js";
+import verifyToken from "./verifyToken.js";
 
 // Service instance
 const ShoppingCart = shoppingCart(database);
@@ -12,7 +13,7 @@ const router = Router();
 // Routes
 
 // Router for getting cart for a user
-router.get("/username/:username", async (req, res) => {
+router.get("/username/:username", verifyToken, async (req, res) => {
     try {
         const data = {
             username: req.params.username
@@ -39,7 +40,7 @@ router.get("/username/:username", async (req, res) => {
     };
 });
 
-router.post("/username/:username/shoeId/:shoeId/add", async (req, res) => {
+router.post("/username/:username/shoeId/:shoeId/add", verifyToken, async (req, res) => {
     try {
         const data = {
             shoeId: req.params.shoeId,
@@ -65,7 +66,7 @@ router.post("/username/:username/shoeId/:shoeId/add", async (req, res) => {
     };
 });
 
-router.post("/username/:username/shoeId/:shoeId/remove", async (req, res) => {
+router.post("/username/:username/shoeId/:shoeId/remove", verifyToken, async (req, res) => {
     try {
         const data = {
             shoeId: req.params.shoeId,
@@ -91,14 +92,14 @@ router.post("/username/:username/shoeId/:shoeId/remove", async (req, res) => {
     };
 });
 
-router.post("/username/:username/payment", async (req, res) => {
+router.post("/username/:username/payment", verifyToken, async (req, res) => {
     try {
-        const payment = req.body;
+        const payment = req.body.payment;
         const data = {
             username: req.params.username
         };
         const cartTotal = await ShoppingCart.getCartTotal(data);
-        const checkPayment = payment.payment >= cartTotal;
+        const checkPayment = payment >= cartTotal;
 
         if (!checkPayment) return res.json({
             status: "error",
@@ -107,6 +108,7 @@ router.post("/username/:username/payment", async (req, res) => {
 
         // Remove all from the cart
         await ShoppingCart.removeAll(data);
+
         res.json({
             status: "success"
         });
