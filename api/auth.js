@@ -87,7 +87,7 @@ authRouter.post("/login", async (req, res) => {
         });
 
         const token = jwt.sign({
-            email: user.email
+            name: user.name
         }, process.env.TOKEN);
 
         res.header("auth-token", token).status(200).json({
