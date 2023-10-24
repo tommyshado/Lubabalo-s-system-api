@@ -24,7 +24,6 @@ router.get("/username/:username", verifyToken, async (req, res) => {
             error: "Not registered in the registrations page"
         });
         const cart = await ShoppingCart.getCart(data);
-        const cartTotal = await ShoppingCart.getCartTotal(data);
 
         // Store cart total
         let totalForCart = 0;
