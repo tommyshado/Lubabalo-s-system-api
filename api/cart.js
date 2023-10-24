@@ -26,10 +26,20 @@ router.get("/username/:username", verifyToken, async (req, res) => {
         const cart = await ShoppingCart.getCart(data);
         const cartTotal = await ShoppingCart.getCartTotal(data);
 
+        // Store cart total
+        let totalForCart = 0;
+        // Loop over the length of the cart then...
+        for (const shoeInCart in cart) {
+            // Get the shoes price and...
+            // add to the total variable
+            const price = cart[shoeInCart].total
+            totalForCart += Number(price);
+        };
+
         res.json({
             status: "success",
             cart: cart,
-            total: cartTotal
+            total: totalForCart
         })
 
     } catch (err) {

@@ -6,19 +6,11 @@ const shoppingCart = (database) => {
 
     const getCart = async (data) =>
         await database.manyOrNone(
-            `select shoe_name, quantity, shoe_price from stock_inventory 
-             INNER JOIN shopping_cart ON stock_inventory.shoe_id = shopping_cart.shoe_id 
-             where username = '${data.username}'`
+            `select stock_inventory.shoe_name, shopping_cart.quantity, stock_inventory.shoe_price,
+            (shopping_cart.quantity * stock_inventory.shoe_price) AS total
+            from stock_inventory inner join shopping_cart ON stock_inventory.shoe_id = shopping_cart.shoe_id
+            where shopping_cart.username = '${data.username}'`
         );
-
-    const getCartTotal = async (data) => {
-        const cart = await getCart(data);
-        let shoeTotal = 0;
-        for (const addedToCart in cart) {
-            shoeTotal += Number(cart[addedToCart].quantity) * Number(cart[addedToCart].shoe_price);
-        }
-        return shoeTotal;
-    };
 
     const addToCart = async (data) => {
         const data__ = [data.username, data.shoeId, 1];
@@ -76,7 +68,6 @@ const shoppingCart = (database) => {
 
     return {
         getCart,
-        getCartTotal,
         addToCart,
         removeFromCart,
         removeAll,

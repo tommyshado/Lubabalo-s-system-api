@@ -99,7 +99,7 @@ describe("shopping cart unit testing", function () {
         // GET shopping cart
         const cart = await ShoppingCart.getCart(data);
 
-        assert.deepEqual([ { shoe_name: 'adidas', quantity: '1', shoe_price: '1799' } ], cart);
+        assert.deepEqual([ { shoe_name: 'adidas', quantity: '1', shoe_price: '1799', total: '1799' } ], cart);
     });
 
     it("should be able to remove a shoe from the cart", async () => {
@@ -127,9 +127,16 @@ describe("shopping cart unit testing", function () {
         // Add to cart
         await ShoppingCart.addToCart(data);
         // Get cart total price
-        const cartTotal = await ShoppingCart.getCartTotal(data);
+        const cart = await ShoppingCart.getCart(data);
 
-        assert.equal(1799.00, cartTotal);
+        // Store cart total
+        let total = 0;
+        // Loop over the length of the cart then...
+        for (const shoeInCart in cart) {
+            total = cart[shoeInCart].total;
+        };
+
+        assert.equal(1799.00, total);
     });
 
     it("should be able to delete shoes in the cart when a payment is successful", async () => {
@@ -146,20 +153,41 @@ describe("shopping cart unit testing", function () {
         // Add to cart again
         await ShoppingCart.addToCart(data__);
 
-        const cartTotal = await ShoppingCart.getCartTotal(data);
-        const cartTotal__ = await ShoppingCart.getCartTotal(data__);
+        const cart = await ShoppingCart.getCart(data);
+        
+        // Store cart total
+        let totalForCart = 0;
+        // Loop over the length of the cart then...
+        for (const shoeInCart in cart) {
+            // Get the shoes price and...
+            // add to the total variable
+            const price = cart[shoeInCart].total
+            totalForCart += Number(price);
+        };
+        
+        const cart__ = await ShoppingCart.getCart(data__);
+
+        // Store cart total
+        let totalForCart__ = 0;
+        // Loop over the length of the cart then...
+        for (const shoeInCart in cart__) {
+            // Get the shoes price and...
+            // add to the total variable
+            const price = cart__[shoeInCart].total
+            totalForCart__ += Number(price);
+        };
 
         // Payment from the user ---> req.body.payment
         const payment = 8596.00
         // Check payment
-        const checkPayment = payment >= (cartTotal + cartTotal__);
+        const checkPayment = payment >= (totalForCart + totalForCart__);
         if (checkPayment) await ShoppingCart.removeAll(data);
 
         // Get cart
         // Join both arrays
-        const cart = (await ShoppingCart.getCart(data)).concat(await ShoppingCart.getCart(data__));
+        const joinCarts = (await ShoppingCart.getCart(data)).concat(await ShoppingCart.getCart(data__));
 
-        assert.deepEqual([], cart);
+        assert.deepEqual([], joinCarts);
     });
 
     it("should not be able to delete shoes in the cart when a payment is not enough", async () => {
@@ -171,17 +199,27 @@ describe("shopping cart unit testing", function () {
         // Add to cart
         await ShoppingCart.addToCart(data);
 
-        const cartTotal = await ShoppingCart.getCartTotal(data);
+        const cart = await ShoppingCart.getCart(data);
         // Get payment from the user ---> req.body.payment
         const payment = 500.00;
 
+        // Store cart total
+        let totalForCart = 0;
+        // Loop over the length of the cart then...
+        for (const shoeInCart in cart) {
+            // Get the shoes price and...
+            // add to the total variable
+            const price = cart[shoeInCart].total
+            totalForCart += Number(price);
+        };
+
         // Check payment
-        const checkPayment = payment >= cartTotal;
+        const checkPayment = payment >= totalForCart;
         if (checkPayment) await ShoppingCart.removeAll(data);
 
         // Get cart
-        const cart = await ShoppingCart.getCart(data);
+        const cart__ = await ShoppingCart.getCart(data);
 
-        assert.equal(1, cart.length);
+        assert.equal(1, cart__.length);
     });
 });
