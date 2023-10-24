@@ -99,7 +99,7 @@ describe("shopping cart unit testing", function () {
         // GET shopping cart
         const cart = await ShoppingCart.getCart(data);
 
-        assert.deepEqual([ { shoe_name: 'adidas', quantity: '1', shoe_price: '1799', total: '1799' } ], cart);
+        assert.deepEqual([ { shoe_name: 'adidas', quantity: '1', shoe_id: '1', shoe_price: '1799', total: '1799' } ], cart);
     });
 
     it("should be able to remove a shoe from the cart", async () => {
