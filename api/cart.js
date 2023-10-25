@@ -106,8 +106,19 @@ router.post("/username/:username/payment", async (req, res) => {
         const data = {
             username: req.params.username
         };
-        const cartTotal = await ShoppingCart.getCartTotal(data);
-        const checkPayment = payment >= cartTotal;
+        const cart = await ShoppingCart.getCart(data);
+
+        // Store cart total
+        let totalForCart = 0;
+        // Loop over the length of the cart then...
+        for (const shoeInCart in cart) {
+            // Get the shoes price and...
+            // add to the total variable
+            const price = cart[shoeInCart].total
+            totalForCart += Number(price);
+        };
+        
+        const checkPayment = payment >= totalForCart;
 
         if (!checkPayment) return res.json({
             status: "error",
