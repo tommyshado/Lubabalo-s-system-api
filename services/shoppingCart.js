@@ -61,10 +61,21 @@ const shoppingCart = (database) => {
         };
     };
 
-    const removeAll = async (user) =>
+    const removeAll = async (data) => {
+        // Delete shoes in the cart then...
         await database.none(
-            `delete from shopping_cart where username = '${user.username}'`
+            `delete from shopping_cart where username = '${data.username}'`
         );
+        // Update the stock inventory
+        await removeAllHelper(data);
+    };
+
+    const removeAllHelper = async (data) => {
+        await database.none(
+            `update stock_inventory set shoe_qty = shoe_qty - (select quantity from shopping_cart where shoe_id = stock_inventory.shoe_id and username = '${data.username}')
+             where shoe_qty > 1 and shoe_id in (select shoe_id from shopping_cart where username = '${data.username}')`
+        );
+    };
 
     return {
         getCart,
