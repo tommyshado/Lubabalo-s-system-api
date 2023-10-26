@@ -27,6 +27,24 @@ router.get("/", async (req, res) => {
     };
 });
 
+router.get("/brand/:brandname", async (req, res) => {
+    try {
+        const nameOfBrand = req.params.brandname;
+        const filteredByBrand = await ShoesService.getShoeBrand(nameOfBrand);
+        res.status(200).json({
+            status: "success",
+            data: filteredByBrand
+        });
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        })
+        
+    };
+});
+
 router.post("/brand/:brandname", async (req, res) => {
     try {
         const nameOfBrand = req.body.brandname;
