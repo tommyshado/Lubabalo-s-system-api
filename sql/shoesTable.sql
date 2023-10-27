@@ -1,29 +1,26 @@
+
+-- RECORDS:
+
+    -- SHOES TABLE:
+        -- shoe_id PRIMARY KEY
+        -- shoe_name VARCHAR
+        -- shoe_quantity INT
+        -- shoe_price INT
+        -- shoe_color VARCHAR
+
+create table stock_inventory (
+    shoe_id serial PRIMARY KEY,
+    shoe_name VARCHAR(30) not null,
+    image text not null,
+    shoe_qty numeric not null,
+    shoe_price numeric not null,
+    shoe_color VARCHAR(30) not null,
+    shoe_size numeric not null
+)
+
 create table user_signup (
     user_id serial PRIMARY KEY,
-    name text not null,
-    password text not null,
-    email text unique not null
+    name text unique not null,
+    password text,
+    email text
 )
-
-create table shoes (
-    shoe_id serial PRIMARY KEY,
-    shoe_name text not null,
-    image text not null,
-    description text not null,
-    price int
-)
-
-create table shoes_stock (
-    qty int,
-    color text,
-    size int,
-    shoe_id int,
-    foreign key (shoe_id) references shoes(shoe_id) on delete cascade
-);
-
-CREATE TABLE shopping_cart (
-    cart_id serial PRIMARY KEY,
-    user_id int REFERENCES user_signup(user_id) ON DELETE CASCADE,
-    shoe_id serial REFERENCES shoes(shoe_id) ON DELETE CASCADE,
-    qty numeric not null
-);

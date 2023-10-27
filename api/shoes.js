@@ -45,14 +45,14 @@ router.get("/brand/:brandname", async (req, res) => {
     };
 });
 
-router.post("/brand/:brandname", async (req, res) => {
+router.post("/brand", async (req, res) => {
     try {
         const nameOfBrand = req.body.brandname;
-        const filteredByBrand = await ShoesService.getShoeBrand(nameOfBrand);
+        const searchedByBrand = await ShoesService.getShoeBrand(nameOfBrand);
 
         res.status(200).json({
             status: "success",
-            data: filteredByBrand
+            data: searchedByBrand
         });
         
     } catch (err) {

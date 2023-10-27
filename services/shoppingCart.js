@@ -41,23 +41,19 @@ const shoppingCart = (database) => {
 
     const removeFromCart = async (user) => {
         const data = [user.shoeId, user.username];
-        // Delete a shoe when the qty is equal 0
-        const helper = await shoes.deleteShoe(data[0]);
 
-        if (!helper) {
-            const checkShoeQty = await database.oneOrNone(
-                `update shopping_cart set quantity = quantity - 1 where shoe_id = ${data[0]} and username = '${data[1]}' and quantity > 1 RETURNING shoe_id`
+        const checkShoeQty = await database.oneOrNone(
+            `update shopping_cart set quantity = quantity - 1 where shoe_id = ${data[0]} and username = '${data[1]}' and quantity > 1 RETURNING shoe_id`
+        );
+
+        if (!checkShoeQty) {
+            await database.none(
+                `delete from shopping_cart where shoe_id = ${data[0]} and username = '${data[1]}'`
             );
 
-            if (!checkShoeQty) {
-                await database.none(
-                    `delete from shopping_cart where shoe_id = ${data[0]} and username = '${data[1]}'`
-                );
-
-            } else {
-                // Increment the qty of the shoe by one
-                await shoes.increaseInventory(data[0]);
-            };
+        } else {
+            // Increment the qty of the shoe by one
+            await shoes.increaseInventory(data[0]);
         };
     };
 
@@ -67,15 +63,15 @@ const shoppingCart = (database) => {
             `delete from shopping_cart where username = '${data.username}'`
         );
         // Update the stock inventory
-        // await removeAllHelper(data);
+        await removeAllHelper(data);
     };
 
-    // const removeAllHelper = async (data) => {
-    //     await database.none(
-    //         `update stock_inventory set shoe_qty = shoe_qty - (select quantity from shopping_cart where shoe_id = stock_inventory.shoe_id and username = '${data.username}')
-    //          where shoe_qty > 1 and shoe_id in (select shoe_id from shopping_cart where username = '${data.username}')`
-    //     );
-    // };
+    const removeAllHelper = async (data) => {
+        await database.none(
+            `update stock_inventory set shoe_qty = shoe_qty - (select quantity from shopping_cart where shoe_id = stock_inventory.shoe_id and username = '${data.username}')
+             where shoe_qty > 1 and shoe_id in (select shoe_id from shopping_cart where username = '${data.username}')`
+        );
+    };
 
     return {
         getCart,
