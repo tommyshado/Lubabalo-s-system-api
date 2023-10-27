@@ -92,6 +92,27 @@ router.post("/username/:username/shoeId/:shoeId/remove", async (req, res) => {
     };
 });
 
+router.post("/username/:username/clear", async (req, res) => {
+    try {
+        const data = {
+            username: req.params.username
+        };
+
+        // Clear shoes in the shopping cart
+        await ShoppingCart.removeAll(data);
+
+        res.json({
+            status: "success"
+        })
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        })
+    };
+})
+
 router.post("/username/:username/payment", async (req, res) => {
     try {
         const payment = req.body.payment;
