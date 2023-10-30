@@ -2,6 +2,9 @@
 import express from "express";
 import bodyParser from "body-parser";
 
+// Import sessions
+import session from "express-session";
+
 // Cors import
 import cors from "cors";
 
@@ -22,6 +25,13 @@ app.use(bodyParser.json());
 app.use("/api/shoes", shoesAPI);
 app.use("/api/cart", cartAPI);
 app.use("/api/user", authAPI);
+
+// initialise session middleware - flash-express depends on it
+app.use(session({
+    secret: "codeXer",
+    resave: false,
+    saveUninitialized: true
+}));
 
 app.use(cors({
     origin: "*"

@@ -1,27 +1,24 @@
 import shoppingCart from "../services/shoppingCart.js"
 import database from "../model/dbConnection.js";
 import { Router } from "express";
-import authService from "../services/authService.js";
+
+// Import to verify users
+import verifyToken from "./verifyToken.js";
 
 // Service instance
 const ShoppingCart = shoppingCart(database);
-const auth = authService(database);
+
 // Router instance
 const router = Router();
 
 // Routes
 
 // Router for getting cart for a user
-router.get("/username/:username", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
     try {
         const data = {
-            username: req.params.username
+            username: req.user.name
         };
-        const checkUsername = await auth.checkUsername(data);
-        if (!checkUsername) return res.json({
-            status: "error",
-            error: "Not registered in the registrations page"
-        });
         const cart = await ShoppingCart.getCart(data);
 
         // Store cart total
@@ -48,11 +45,12 @@ router.get("/username/:username", async (req, res) => {
     };
 });
 
-router.post("/username/:username/shoeId/:shoeId/add", async (req, res) => {
+// Router to add a shoe to shopping cart
+router.post("/shoeId/:shoeId/add", verifyToken, async (req, res) => {
     try {
         const data = {
             shoeId: req.params.shoeId,
-            username: req.params.username
+            username: req.user.name
         };
 
         // Adding to the cart
@@ -70,11 +68,12 @@ router.post("/username/:username/shoeId/:shoeId/add", async (req, res) => {
     };
 });
 
-router.post("/username/:username/shoeId/:shoeId/remove", async (req, res) => {
+// Router decreases the quantity of a shoe added to the shopping cart
+router.post("/shoeId/:shoeId/remove", verifyToken, async (req, res) => {
     try {
         const data = {
             shoeId: req.params.shoeId,
-            username: req.params.username
+            username: req.user.name
         };
 
         // Removing from the cart
@@ -92,10 +91,11 @@ router.post("/username/:username/shoeId/:shoeId/remove", async (req, res) => {
     };
 });
 
-router.post("/username/:username/clear", async (req, res) => {
+// Router remove a shoe from the shopping cart
+router.post("/shoeId/:shoeId/removeAShoe", verifyToken, async (req, res) => {
     try {
         const data = {
-            username: req.params.username
+            shoeId: req.user.shoeId
         };
 
         // Clear shoes in the shopping cart
@@ -113,11 +113,12 @@ router.post("/username/:username/clear", async (req, res) => {
     };
 })
 
-router.post("/username/:username/payment", async (req, res) => {
+// Router to make a payment
+router.post("/payment", verifyToken, async (req, res) => {
     try {
         const payment = req.body.payment;
         const data = {
-            username: req.params.username
+            username: req.user.name
         };
         const cart = await ShoppingCart.getCart(data);
 

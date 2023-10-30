@@ -1,7 +1,7 @@
 
 const shoppingCart = (database) => {
 
-    const getCart = async (data) =>
+    const getCart = async (data) => 
         await database.manyOrNone(
             `select stock_inventory.shoe_name, shopping_cart.shoe_id, shopping_cart.quantity, stock_inventory.shoe_price,
             (shopping_cart.quantity * stock_inventory.shoe_price) AS total
