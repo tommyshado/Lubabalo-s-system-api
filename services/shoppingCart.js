@@ -1,8 +1,5 @@
-import shoesService from "./shoesService.js";
 
 const shoppingCart = (database) => {
-    // Instances of the shoes service
-    const shoes = shoesService(database);
 
     const getCart = async (data) =>
         await database.manyOrNone(
@@ -21,16 +18,12 @@ const shoppingCart = (database) => {
                 "insert into shopping_cart (username, shoe_id, quantity) values ($1, $2, $3)",
                 data__
             );
-            // Decrement the stock qty by one
-            await shoes.updateInventory(data__[1]);
 
         } else {
             await database.none(
                 "update shopping_cart set quantity = quantity + 1 where username = $1 and shoe_id = $2",
                 data__
             );
-            // Decrement the stock qty by one
-            await shoes.updateInventory(data__[1]);
         };
     };
 
@@ -50,11 +43,15 @@ const shoppingCart = (database) => {
             await database.none(
                 `delete from shopping_cart where shoe_id = ${data[0]} and username = '${data[1]}'`
             );
-
-        } else {
-            // Increment the qty of the shoe by one
-            await shoes.increaseInventory(data[0]);
         };
+    };
+
+    const removeShoeInCart = async (user) => {
+        const data = [user.shoeId, user.username];
+
+        await database.none(
+            `delete from shopping_cart where shoe_id = ${data[0]} and username = '${data[1]}'`
+        );
     };
 
     const removeAll = async (data) => {
@@ -77,6 +74,7 @@ const shoppingCart = (database) => {
         getCart,
         addToCart,
         removeFromCart,
+        removeShoeInCart,
         removeAll,
     };
 };

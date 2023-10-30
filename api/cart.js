@@ -99,7 +99,7 @@ router.post("/username/:username/clear", async (req, res) => {
         };
 
         // Clear shoes in the shopping cart
-        await ShoppingCart.removeAll(data);
+        await ShoppingCart.removeShoeInCart(data);
 
         res.json({
             status: "success"
