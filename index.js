@@ -33,7 +33,9 @@ app.use(session({
     saveUninitialized: true
 }));
 
-app.use(cors());
+app.use(cors({
+    origin: "*"
+}));
 
 // PORT variable
 const PORT = process.env.PORT || 3000;
