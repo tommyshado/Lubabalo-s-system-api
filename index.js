@@ -16,6 +16,11 @@ import authAPI from "./api/auth.js";
 // Instances
 const app = express();
 
+// Cors middleware
+app.use(cors({
+    origin: "*"
+}));
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
@@ -31,10 +36,6 @@ app.use(session({
     secret: "codeXer",
     resave: false,
     saveUninitialized: true
-}));
-
-app.use(cors({
-    origin: "*"
 }));
 
 // PORT variable
