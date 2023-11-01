@@ -60,7 +60,10 @@ const shoppingCart = (database) => {
     const removeShoeInCart = async (user) => {
         const data = [user.shoeId, user.username];
         // Update the stock inventory then...
-        await removeAllHelper(data);
+        await database.none(
+            `update stock_inventory set shoe_qty = shoe_qty + (select quantity from shopping_cart where shoe_id = stock_inventory.shoe_id and username = '${data[1]}')
+             where shoe_qty > 0 and shoe_id in (select shoe_id from shopping_cart where username = '${data[1]}')`
+        );
 
         // Remove the shoe in the cart
         await database.none(
@@ -81,7 +84,7 @@ const shoppingCart = (database) => {
 
     const removeAllHelper = async (data) => {
         await database.none(
-            `update stock_inventory set shoe_qty = shoe_qty - (select quantity from shopping_cart where shoe_id = stock_inventory.shoe_id and username = '${data.username}')
+            `update stock_inventory set shoe_qty = shoe_qty - (select quantity from shopping_cart where shoe_id = stock_inventory.shoe_id and username = '${data[1]}')
              where shoe_qty > 0 and shoe_id in (select shoe_id from shopping_cart where username = '${data[1]}')`
         );
     };
