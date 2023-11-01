@@ -47,13 +47,13 @@ const shoppingCart = (database) => {
         );
 
         if (!checkShoeQty) {
+            // Increase the quantity of the stock
+            shoes.increaseInventory(data[0]);
+
+            // Remove the shoe in the cart
             await database.none(
                 `delete from shopping_cart where shoe_id = ${data[0]} and username = '${data[1]}'`
             );
-
-        } else {
-            // Increase the quantity of the stock
-            shoes.increaseInventory(data[0]);
         };
     };
 
