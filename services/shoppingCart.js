@@ -78,7 +78,7 @@ const shoppingCart = (database) => {
 
         // Delete shoes in the cart then
         await database.none(
-            `delete from shopping_cart where username = '${data[0]}'`
+            `delete from shopping_cart where username = '${data[1]}'`
         );
     };
 
