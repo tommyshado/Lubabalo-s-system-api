@@ -55,7 +55,7 @@ const shoppingCart = (database) => {
         // Case where the checkShqoeQty variable is truthy then...
         } else if (checkShoeQty) {
             // Increase the quantity of the stock
-            shoes.increaseInventory(data[0]);
+            await shoes.increaseInventory(data[0]);
         };
     };
 
