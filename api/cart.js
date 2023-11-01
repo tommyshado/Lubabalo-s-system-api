@@ -95,7 +95,7 @@ router.post("/shoeId/:shoeId/remove", verifyToken, async (req, res) => {
 router.post("/shoeId/:shoeId/removeAShoe", verifyToken, async (req, res) => {
     try {
         const data = {
-            shoeId: req.user.shoeId
+            shoeId: req.params.shoeId
         };
 
         // Clear shoes in the shopping cart
