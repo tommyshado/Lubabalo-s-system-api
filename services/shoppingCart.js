@@ -18,12 +18,16 @@ const shoppingCart = (database) => {
                 "insert into shopping_cart (username, shoe_id, quantity) values ($1, $2, $3)",
                 data__
             );
+            // Decrement the stock qty by one
+            await shoes.updateInventory(data__[1]);
 
         } else {
             await database.none(
                 "update shopping_cart set quantity = quantity + 1 where username = $1 and shoe_id = $2",
                 data__
             );
+            // Decrement the stock qty by one
+            await shoes.updateInventory(data__[1]);
         };
     };
 
