@@ -41,35 +41,41 @@ const shoppingCart = (database) => {
 
     const removeFromCart = async (user) => {
         const data = [user.shoeId, user.username];
+        const checkHelper = await removeFromCartHelper(data);
 
-        const checkShoeQty = await database.oneOrNone(
-            `update shopping_cart set quantity = quantity - 1 where shoe_id = ${data[0]} and username = '${data[1]}' and quantity > 1 RETURNING shoe_id`
-        );
-
-        if (!checkShoeQty) {
+        if (!checkHelper) {
             // Remove the shoe in the cart
             await database.none(
                 `delete from shopping_cart where shoe_id = ${data[0]} and username = '${data[1]}'`
             );
 
-        // Case where the checkShqoeQty variable is truthy then...
-        } else if (checkShoeQty) {
+        // Case where the checkHelper variable is truthy then...
+        } else {
             // Increase the quantity of the stock
             await shoes.increaseInventory(data[0]);
         };
     };
 
+    const removeFromCartHelper = async (data) =>
+        await database.oneOrNone(
+            `update shopping_cart set quantity = quantity - 1 where shoe_id = ${data[0]} and username = '${data[1]}' and quantity > 1 RETURNING shoe_id`
+        );
+    
     const removeShoeInCart = async (user) => {
         const data = [user.shoeId, user.username];
         // Update the stock inventory then...
-        await database.none(
-            `update stock_inventory set shoe_qty = shoe_qty + (select quantity from shopping_cart where shoe_id = '${data[0]}' and username = '${data[1]}')
-             where shoe_qty > 0 and shoe_id in (select shoe_id from shopping_cart where shoe_id = '${data[0]}' and username = '${data[1]}')`
-        );
+        await removeShoeInCartHelper(data);
 
         // Remove the shoe in the cart
         await database.none(
             `delete from shopping_cart where shoe_id = ${data[0]} and username = '${data[1]}'`
+        );
+    };
+
+    const removeShoeInCartHelper = async (data) => {
+        await database.none(
+            `update stock_inventory set shoe_qty = shoe_qty + (select quantity from shopping_cart where shoe_id = '${data[0]}' and username = '${data[1]}')
+             where shoe_qty > 0 and shoe_id in (select shoe_id from shopping_cart where shoe_id = '${data[0]}' and username = '${data[1]}')`
         );
     };
 
