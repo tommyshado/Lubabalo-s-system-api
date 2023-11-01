@@ -1,5 +1,8 @@
+import shoesService from "./shoesService.js";
 
 const shoppingCart = (database) => {
+    // Get shoes instance
+    const shoes = shoesService(database);
 
     const getCart = async (data) => 
         await database.manyOrNone(
