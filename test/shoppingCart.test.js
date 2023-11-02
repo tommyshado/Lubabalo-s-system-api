@@ -35,6 +35,7 @@ describe("shopping cart unit testing", function () {
             const data = [
                 [
                     "adidas",
+                    "samba og",
                     "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/f79-ADIDAS-Samba-OG-B75807-side-uJO.jpg",
                     7,
                     1799.0,
@@ -43,6 +44,7 @@ describe("shopping cart unit testing", function () {
                 ],
                 [
                     "adidas",
+                    "samba og",
                     "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/9b2-IE7564-HOMER-SIMPSON-x-STAN-SMITH-side-3hU.jpg",
                     9,
                     2499.0,
@@ -51,11 +53,11 @@ describe("shopping cart unit testing", function () {
                 ],
             ];
             await database.none(
-                "insert into stock_inventory (shoe_name, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6)",
+                "insert into stock_inventory (shoe_name, description, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6, $7)",
                 data[0]
             );
             await database.none(
-                "insert into stock_inventory (shoe_name, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6)",
+                "insert into stock_inventory (shoe_name, description, image, shoe_qty, shoe_price, shoe_color, shoe_size) values ($1, $2, $3, $4, $5, $6, $7)",
                 data[1]
             );
 
@@ -99,7 +101,7 @@ describe("shopping cart unit testing", function () {
         // GET shopping cart
         const cart = await ShoppingCart.getCart(data);
 
-        assert.deepEqual([ { shoe_name: 'adidas', quantity: '1', shoe_id: '1', shoe_price: '1799', total: '1799' } ], cart);
+        assert.deepEqual([ { description: 'samba og', quantity: '1', shoe_id: '1', shoe_price: '1799', total: '1799' } ], cart);
     });
 
     it("should be able to remove a shoe from the cart", async () => {
