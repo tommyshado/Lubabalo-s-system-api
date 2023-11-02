@@ -58,7 +58,7 @@ const shoppingCart = (database) => {
 
     const removeFromCartHelper = async (data) =>
         await database.oneOrNone(
-            `update shopping_cart set quantity = quantity - 1 where shoe_id = ${data[0]} and username = '${data[1]}' and quantity > 1 RETURNING shoe_id`
+            `update shopping_cart set quantity = quantity - 1 where shoe_id = ${data[0]} and username = '${data[1]}' and quantity > 0 RETURNING shoe_id`
         );
     
     const removeShoeInCart = async (user) => {
