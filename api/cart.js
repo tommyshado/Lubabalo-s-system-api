@@ -14,7 +14,7 @@ const router = Router();
 // Routes
 
 // Router for getting cart for a user
-router.get("/cart", verifyToken, async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
     try {
         const data = {
             username: req.user.name
