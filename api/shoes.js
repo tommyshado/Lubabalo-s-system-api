@@ -149,7 +149,7 @@ router.post("/shoeId/:shoeId/add", async (req, res) => {
     };
 });
 
-router.post("/shoeId/shoeId/remove", async (req, res) => {
+router.post("/shoeId/:shoeId/remove", async (req, res) => {
     const { shoeId } = req.params;
     try {
         await ShoesService.deleteShoe(shoeId);
