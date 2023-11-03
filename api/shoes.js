@@ -131,6 +131,42 @@ router.post("/", async (req, res) => {
     };
 });
 
+// Increasing quantity of shoes and deleting a shoe from the display
+router.post("/shoeId/:shoeId/add", async (req, res) => {
+    const { shoeId } = req.params;
+    try {
+        await ShoesService.increaseInventory(shoeId);
+
+        res.status(200).json({
+            status: "success"
+        });
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        });
+    };
+});
+
+router.post("/shoeId/shoeId/remove", async (req, res) => {
+    const { shoeId } = req.params;
+    try {
+        await ShoesService.deleteShoe(shoeId);
+
+        res.status(200).json({
+            status: "success"
+        });
+        
+    } catch (err) {
+        res.json({
+            status: "error",
+            error: err.stack
+        });
+    };
+
+});
+
 // Filtering with colors, brand names and sizes
 router.get("/brand/color/:color", async (req, res) => {
     try {

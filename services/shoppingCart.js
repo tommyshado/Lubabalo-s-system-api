@@ -41,18 +41,18 @@ const shoppingCart = (database) => {
 
     const removeFromCart = async (user) => {
         const data = [user.shoeId, user.username];
-        const checkHelper = (await removeFromCartHelper(data)).quantity === '0';
+        const checkHelper = await removeFromCartHelper(data);
 
         if (checkHelper) {
-            // Remove the shoe in the cart
-            await database.none(
-                `delete from shopping_cart where shoe_id = ${data[0]} and username = '${data[1]}'`
-            );
-
-        // Case where the checkHelper variable is truthy then...
-        } else {
             // Increase the quantity of the stock
             await shoes.increaseInventory(data[0]);
+
+            if (checkHelper.quantity === '0') {
+                // Remove the shoe in the cart
+                await database.none(
+                    `delete from shopping_cart where shoe_id = ${data[0]} and username = '${data[1]}'`
+                );
+            };
         };
     };
 

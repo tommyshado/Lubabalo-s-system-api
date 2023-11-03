@@ -35,7 +35,7 @@ const shoesService = database => {
         await database.none(`update stock_inventory set shoe_qty = shoe_qty + 1 where shoe_id = ${shoeId}`);
     };
 
-    const deleteShoe = async (shoeId) => await database.oneOrNone(`delete from stock_inventory where shoe_id = ${shoeId} and shoe_qty = 0 RETURNING shoe_id`);
+    const deleteShoe = async (shoeId) => await database.oneOrNone(`delete from stock_inventory where shoe_id = ${shoeId}`);
 
     const getShoeBrand = async (brandname) => await database.manyOrNone(`select * from stock_inventory where shoe_name like '%${brandname}%'`);
 
