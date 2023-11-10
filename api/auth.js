@@ -30,6 +30,9 @@ authRouter.post("/signup", async (req, res) => {
             password: hashedPassword
         };
 
+        user.name.toLowerCase();
+        user.email.toLowerCase();
+
         // CREATE new user
         await AuthService.createUser(user);
 
@@ -77,6 +80,17 @@ authRouter.post("/login", async (req, res) => {
             password: req.body.password
         };
 
+        user.name.toLowerCase();
+        user.email.toLowerCase();
+
+        // Checks registered users
+        const getUser = await AuthService.checkUser(user);
+
+        if (!getUser) return res.json({
+            status: "error",
+            error: "Not registered in the signup page."
+        })
+
         // GET password from the database
         const password = await AuthService.getPassword(user);
         const validPassword = await bcrypt.compare(user.password, password.password);
@@ -86,13 +100,17 @@ authRouter.post("/login", async (req, res) => {
             error: "Invalid password."
         });
 
+        // Get role
+        const role = await AuthService.getRole(user);
+
         const token = jwt.sign({
             name: user.name
         }, process.env.TOKEN);
 
         res.header("auth-token", token).status(200).json({
             status: "Logged in...",
-            token: token
+            token: token,
+            role: role
         });
 
     } catch (err) {
