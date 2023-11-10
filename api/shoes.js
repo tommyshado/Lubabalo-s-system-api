@@ -196,7 +196,7 @@ router.get("/brand/:brandname/color/:color", async (req, res) => {
 
         res.json({
             status: "success",
-            data: filtered
+            data: filtered === null ? [] : filtered
         })
         
     } catch (err) {
