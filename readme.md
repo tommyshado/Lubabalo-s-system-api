@@ -56,3 +56,11 @@ Hello everyone, welcome to Lubabalo's SAAS shoes API. I developed these SAAS API
 * Database: PostgreSQL
 * Testing: MochaJS and ChaiJs
 * Development Methodology: TDD (Test Driven Development)
+
+## Running Tests
+
+To run tests, run the following command
+
+```bash
+  npm run test
+```
