@@ -13,11 +13,11 @@ const authService = (database) => {
 
     const getUsers = async () => await database.manyOrNone("select * from user_signup");
 
-    const checkUser = async (user) => await database.oneOrNone(`select * from user_signup where username = '${user.emailOrName}' or email = '${user.emailOrName}'`);
+    const checkUser = async (user) => await database.oneOrNone(`select * from user_signup where username = '${user.username}' or email = '${user.email}'`);
 
-    const getPassword = async (user) => await database.oneOrNone(`select password from user_signup where username = '${user.emailOrName}' or email = '${user.emailOrName}'`);
+    const getPassword = async (user) => await database.oneOrNone(`select password from user_signup where email = '${user.email}'`);
 
-    const getRole = async (user) => await database.oneOrNone(`select role from user_signup where username = '${user.emailOrName}' or email = '${user.emailOrName}'`);
+    const getRole = async (user) => await database.oneOrNone(`select role from user_signup where username = '${user.username}' or email = '${user.email}'`);
 
     return {
         createUser,
