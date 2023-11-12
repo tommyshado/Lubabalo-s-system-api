@@ -26,8 +26,8 @@ router.get("/", verifyToken, async (req, res) => {
         // Loop over the length of the cart then...
         for (const shoeInCart in cart) {
             // Get the shoes price and...
-            // add to the total variable
             const price = cart[shoeInCart].total
+            // add to the total variable
             totalForCart += Number(price);
         };
 
@@ -128,8 +128,8 @@ router.post("/payment", verifyToken, async (req, res) => {
         // Loop over the length of the cart then...
         for (const shoeInCart in cart) {
             // Get the shoes price and...
-            // add to the total variable
             const price = cart[shoeInCart].total
+            // add to the total variable
             totalForCart += Number(price);
         };
         

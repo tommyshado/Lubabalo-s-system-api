@@ -80,7 +80,6 @@ const shoppingCart = (database) => {
     };
 
     const removeAll = async (user) => {
-        // Delete shoes in the cart then
         await database.none(
             `delete from shopping_cart where username = '${user.username}'`
         );
