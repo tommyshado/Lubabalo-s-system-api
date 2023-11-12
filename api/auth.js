@@ -75,13 +75,11 @@ authRouter.post("/login", async (req, res) => {
 
         // USER object
         const user = {
-            name: req.body.name,
-            email: req.body.email,
+            emailOrName: req.body.emailOrName,
             password: req.body.password
         };
 
-        user.name.toLowerCase();
-        user.email.toLowerCase();
+        user.emailOrName.toLowerCase();
 
         // Checks registered users
         const getUser = await AuthService.checkUser(user);
@@ -104,7 +102,7 @@ authRouter.post("/login", async (req, res) => {
         const role = await AuthService.getRole(user);
 
         const token = jwt.sign({
-            name: user.name
+            emailOrName: user.emailOrName
         }, process.env.TOKEN);
 
         res.header("auth-token", token).status(200).json({

@@ -1,13 +1,18 @@
 import Joi from "joi";
 
-const schema = Joi.object({
+const signupSchema = Joi.object({
     name: Joi.string().min(6).required(),
     email: Joi.string().min(6).required(),
     password: Joi.string().min(6).required()
 });
 
-const signup = (data) => schema.validate(data);
+const loginSchema = Joi.object({
+    emailOrName: Joi.string().min(6).required(),
+    password: Joi.string().min(6).required()
+});
 
-const login = (data) => schema.validate(data);
+const signup = (data) => signupSchema.validate(data);
+
+const login = (data) => loginSchema.validate(data);
 
 export { signup, login };
