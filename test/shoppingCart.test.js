@@ -135,7 +135,7 @@ describe("shopping cart unit testing", function () {
         let total = 0;
         // Loop over the length of the cart then...
         for (const shoeInCart in cart) {
-            total = cart[shoeInCart].total;
+            total += cart[shoeInCart].total;
         };
 
         assert.equal(1799.00, total);
