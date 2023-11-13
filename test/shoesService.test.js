@@ -5,7 +5,7 @@ import "dotenv/config";
 import shoesService from "../services/shoesService.js";
 
 const pgp = pgPromise();
-const dbURL = process.env.DB_CONNECTION_FOR_TESTING;
+const dbURL = process.env.DB_CONNECTION_FOR_TESTING || "postgres://oyudfdrn:YwW8bBEJVlcct8IrPjEmlXQJ_UHsTPOM@cornelius.db.elephantsql.com/oyudfdrn";
 const database = pgp(dbURL);
 
 const ShoesService = shoesService(database);
