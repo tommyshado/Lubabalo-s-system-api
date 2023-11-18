@@ -21,20 +21,15 @@ router.get("/", verifyToken, async (req, res) => {
         };
         const cart = await ShoppingCart.getCart(data);
 
-        // Store cart total
-        let totalForCart = 0;
-        // Loop over the length of the cart then...
-        for (const shoeInCart in cart) {
-            // Get the shoes price and...
-            const price = cart[shoeInCart].total
-            // add to the total variable
-            totalForCart += Number(price);
-        };
+        let cartTotal = 0;
+        const sumTotals = (shoeInCart) => cartTotal += Number(shoeInCart.total);
+
+        cart.forEach(sumTotals);
 
         res.json({
             status: "success",
             cart: cart,
-            total: totalForCart
+            total: cartTotal
         })
 
     } catch (err) {
@@ -123,17 +118,12 @@ router.post("/payment", verifyToken, async (req, res) => {
         };
         const cart = await ShoppingCart.getCart(data);
 
-        // Store cart total
-        let totalForCart = 0;
-        // Loop over the length of the cart then...
-        for (const shoeInCart in cart) {
-            // Get the shoes price and...
-            const price = cart[shoeInCart].total
-            // add to the total variable
-            totalForCart += Number(price);
-        };
-        
-        const checkPayment = payment >= totalForCart;
+        let cartTotal = 0;
+        const sumTotals = (shoeInCart) => cartTotal += Number(shoeInCart.total);
+
+        cart.forEach(sumTotals);
+
+        const checkPayment = payment >= cartTotal;
 
         if (!checkPayment) return res.json({
             status: "error",
