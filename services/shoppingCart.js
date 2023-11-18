@@ -4,7 +4,7 @@ const shoppingCart = (database) => {
     // Get shoes instance
     const shoes = shoesService(database);
 
-    const getCart = async (data) => 
+    const getCart = async (data) =>
         await database.manyOrNone(
             `select stock_inventory.description, shopping_cart.shoe_id, shopping_cart.quantity, stock_inventory.shoe_price,
             (shopping_cart.quantity * stock_inventory.shoe_price) AS total
@@ -31,7 +31,7 @@ const shoppingCart = (database) => {
             );
             // Decrement the stock qty by one
             await shoes.updateInventory(data__[1]);
-        };
+        }
     };
 
     const addToCartHelper = async (data) =>
@@ -47,20 +47,20 @@ const shoppingCart = (database) => {
             // Increase the quantity of the stock
             await shoes.increaseInventory(data[0]);
 
-            if (checkHelper.quantity === '0') {
+            if (checkHelper.quantity === "0") {
                 // Remove the shoe in the cart
                 await database.none(
                     `delete from shopping_cart where shoe_id = ${data[0]} and username = '${data[1]}'`
                 );
-            };
-        };
+            }
+        }
     };
 
     const removeFromCartHelper = async (data) =>
         await database.oneOrNone(
             `update shopping_cart set quantity = quantity - 1 where shoe_id = ${data[0]} and username = '${data[1]}' and quantity > 0 RETURNING quantity`
         );
-    
+
     const removeShoeInCart = async (user) => {
         const data = [user.shoeId, user.username];
         // Update the stock inventory then...
