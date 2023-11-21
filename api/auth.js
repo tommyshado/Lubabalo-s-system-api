@@ -105,7 +105,7 @@ authRouter.post("/login", async (req, res) => {
 
         const token = jwt.sign({
             name: user.name
-        }, 'secret', { expiresIn: '1h' }, process.env.TOKEN);
+        }, process.env.TOKEN, { expiresIn: '1h' });
 
         res.header("auth-token", token).status(200).json({
             status: "Logged in...",
