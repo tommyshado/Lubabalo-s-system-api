@@ -25,14 +25,14 @@ const shoesService = (database) => {
             );
         } else {
             await database.none(
-                `update stock_inventory set shoe_qty = shoe_qty + ${data[4]} where image = '${data[3]}'`
+                `update stock_inventory set shoe_qty = shoe_qty + ${data[4]} where shoe_name = '${data[0]}'`
             );
         }
     };
 
     const insertShoeHelper = async (shoe) =>
         await database.manyOrNone(
-            `select * from stock_inventory where image = '${shoe.image}'`
+            `select * from stock_inventory where shoe_name = '${shoe.shoe_name}'`
         );
 
     const updateInventory = async (shoeId) => {
