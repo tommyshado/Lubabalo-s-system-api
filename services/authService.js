@@ -7,30 +7,36 @@ const authService = (database) => {
         );
     };
 
-    const getUsers = async () =>
-        await database.manyOrNone("select * from user_signup");
+    const getUsers = async () => await database.manyOrNone("select * from user_signup");
 
-    const checkUser = async (user) =>
-        await database.oneOrNone(
-            `select * from user_signup where username = '${user.username}' or email = '${user.email}'`
-        );
+    const checkUser = async ({usernameOrEmail}) => {
+        const checksEmail = usernameOrEmail.includes("@");
 
-    const getPassword = async (user) =>
-        await database.oneOrNone(
-            `select password from user_signup where email = '${user.email}'`
-        );
+        if (!checksEmail) {
+            const data = [
+                usernameOrEmail
+            ];
+            const filter = `where username = $1`;
+            const query = `select * from user_signup ${filter}`;
+            
+            return await database.manyOrNone(query, data);
+        };
 
-    const getRole = async (user) =>
-        await database.oneOrNone(
-            `select role from user_signup where username = '${user.username}' or email = '${user.email}'`
-        );
+        if (checksEmail) {
+            const data = [
+                usernameOrEmail
+            ];
+            const filter = `where email = $1`;
+            const query = `select * from user_signup ${filter}`;
+
+            return await database.manyOrNone(query, data);
+        };
+    };
 
     return {
         createUser,
         getUsers,
-        checkUser,
-        getPassword,
-        getRole,
+        checkUser
     };
 };
 

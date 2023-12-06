@@ -20,8 +20,8 @@ create table user_signup (
 create table shopping_cart (
     cart_id serial PRIMARY KEY,
     quantity int not null,
-    username text,
-    foreign key (username) references user_signup(name) on delete cascade,
+    user_id int,
+    foreign key (user_id) references user_signup(user_id) on delete cascade,
     shoe_id text,
     foreign key (shoe_id) references stock_inventory(shoe_id) on delete cascade,
 )

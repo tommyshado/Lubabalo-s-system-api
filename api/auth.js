@@ -75,41 +75,46 @@ authRouter.post("/login", async (req, res) => {
 
         // USER object
         const user = {
-            name: req.body.name,
-            email: req.body.email,
+            usernameOrEmail: req.body.usernameOrEmail,
             password: req.body.password
-        };
+        }; 
 
-        user.name.toLowerCase();
-        user.email.toLowerCase();
+        user.usernameOrEmail.toLowerCase()
 
         // Checks registered users
         const getUser = await AuthService.checkUser(user);
 
-        if (!getUser) return res.json({
+        if (getUser.length === 0) return res.json({
             status: "error",
             error: "Not registered in the signup page."
         })
 
-        // GET password from the database
-        const password = await AuthService.getPassword(user);
-        const validPassword = await bcrypt.compare(user.password, password.password);
+        let password;
+        let userId;
+        let role;
+        
+        getUser.forEach(results => {
+            password = results.password;
+            userId = results.user_id;
+            role = results.role;
+        });
 
-        if (!validPassword) return res.status(400).json({
+        const validPassword = await bcrypt.compare(user.password, password);
+
+        if (!validPassword) return res.json({
             status: "error",
             error: "Invalid password."
         });
 
-        // Get role
-        const role = await AuthService.getRole(user);
 
         const token = jwt.sign({
-            name: user.name
+            id: userId
         }, process.env.TOKEN, { expiresIn: '1h' });
 
         res.header("auth-token", token).status(200).json({
             status: "Logged in...",
             token: token,
+            loggedUserId: userId,
             role: role
         });
 

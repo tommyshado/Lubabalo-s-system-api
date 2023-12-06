@@ -3,7 +3,7 @@ import database from "../model/dbConnection.js";
 import { Router } from "express";
 
 // Import to verify users
-import verifyToken from "./verifyToken.js";
+import verifyToken from "../middlewares/verifyToken.js";
 
 // Service instance
 const ShoppingCart = shoppingCart(database);
@@ -17,7 +17,7 @@ const router = Router();
 router.get("/", verifyToken, async (req, res) => {
     try {
         const data = {
-            username: req.user.name
+            id: req.user.id
         };
         const cart = await ShoppingCart.getCart(data);
 
@@ -45,7 +45,7 @@ router.post("/shoeId/:shoeId/add", verifyToken, async (req, res) => {
     try {
         const data = {
             shoeId: req.params.shoeId,
-            username: req.user.name
+            id: req.user.id
         };
 
         // Adding to the cart
@@ -68,7 +68,7 @@ router.post("/shoeId/:shoeId/remove", verifyToken, async (req, res) => {
     try {
         const data = {
             shoeId: req.params.shoeId,
-            username: req.user.name
+            id: req.user.id
         };
 
         // Removing from the cart
@@ -91,7 +91,7 @@ router.post("/shoeId/:shoeId/removeAShoe", verifyToken, async (req, res) => {
     try {
         const data = {
             shoeId: req.params.shoeId,
-            username: req.user.name
+            id: req.user.id
         };
 
         // Clear shoes in the shopping cart
@@ -114,7 +114,7 @@ router.post("/payment", verifyToken, async (req, res) => {
     try {
         const payment = req.body.payment;
         const data = {
-            username: req.user.name
+            id: req.user.id
         };
         const cart = await ShoppingCart.getCart(data);
 

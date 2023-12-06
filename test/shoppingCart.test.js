@@ -9,7 +9,9 @@ import shoppingCart from "../services/shoppingCart.js";
 import bcrypt from "bcrypt";
 
 const pgp = pgPromise();
-const dbURL = process.env.DB_CONNECTION_FOR_TESTING || "postgres://oyudfdrn:YwW8bBEJVlcct8IrPjEmlXQJ_UHsTPOM@cornelius.db.elephantsql.com/oyudfdrn";
+const dbURL =
+    process.env.DB_CONNECTION_FOR_TESTING ||
+    "postgres://oyudfdrn:YwW8bBEJVlcct8IrPjEmlXQJ_UHsTPOM@cornelius.db.elephantsql.com/oyudfdrn";
 const database = pgp(dbURL);
 
 const ShoppingCart = shoppingCart(database);
@@ -92,7 +94,7 @@ describe("shopping cart unit testing", function () {
 
     it("should be able to get a cart", async () => {
         const data = {
-            username: "tommyshado",
+            id: "1",
             // shoe_id for samba black adidas
             shoeId: "1",
         };
@@ -101,12 +103,23 @@ describe("shopping cart unit testing", function () {
         // GET shopping cart
         const cart = await ShoppingCart.getCart(data);
 
-        assert.deepEqual([ { description: 'samba og', quantity: '1', shoe_id: '1', shoe_price: '1799', total: '1799' } ], cart);
+        assert.deepEqual(
+            [
+                {
+                    description: "samba og",
+                    quantity: "1",
+                    shoe_id: "1",
+                    shoe_price: "1799",
+                    total: "1799",
+                },
+            ],
+            cart
+        );
     });
 
-    it("should be able to remove a shoe from the cart", async () => {
+    it("should be able to decrease a shoe quantity from the cart", async () => {
         const data = {
-            username: "tendani",
+            id: "1",
             shoeId: "2",
         };
         // Add to cart
@@ -117,12 +130,23 @@ describe("shopping cart unit testing", function () {
         // GET shopping cart
         const cart = await ShoppingCart.getCart(data);
 
-        assert.deepEqual([], cart);
+        assert.deepEqual(
+            [
+                {
+                    description: "samba og",
+                    shoe_id: 2,
+                    quantity: 0,
+                    shoe_price: "2499",
+                    total: "0",
+                },
+            ],
+            cart
+        );
     });
 
     it("should be able to calculate the overall total of shoes in the cart", async () => {
         const data = {
-            username: "tommyshado",
+            id: "1",
             // shoe_id for samba black adidas
             shoeId: "1",
         };
@@ -136,18 +160,18 @@ describe("shopping cart unit testing", function () {
         // Loop over the length of the cart then...
         for (const shoeInCart in cart) {
             total += cart[shoeInCart].total;
-        };
+        }
 
-        assert.equal(1799.00, total);
+        assert.equal(1799.0, total);
     });
 
     it("should be able to delete shoes in the cart when a payment is successful", async () => {
         const data = {
-            username: "tendani",
+            id: "2",
             shoeId: "2",
         };
         const data__ = {
-            username: "tendani",
+            id: "2",
             shoeId: "1",
         };
         // Add to cart
@@ -156,17 +180,17 @@ describe("shopping cart unit testing", function () {
         await ShoppingCart.addToCart(data__);
 
         const cart = await ShoppingCart.getCart(data);
-        
+
         // Store cart total
         let totalForCart = 0;
         // Loop over the length of the cart then...
         for (const shoeInCart in cart) {
             // Get the shoes price and...
             // add to the total variable
-            const price = cart[shoeInCart].total
+            const price = cart[shoeInCart].total;
             totalForCart += Number(price);
-        };
-        
+        }
+
         const cart__ = await ShoppingCart.getCart(data__);
 
         // Store cart total
@@ -175,26 +199,28 @@ describe("shopping cart unit testing", function () {
         for (const shoeInCart in cart__) {
             // Get the shoes price and...
             // add to the total variable
-            const price = cart__[shoeInCart].total
+            const price = cart__[shoeInCart].total;
             totalForCart__ += Number(price);
-        };
+        }
 
         // Payment from the user ---> req.body.payment
-        const payment = 8596.00
+        const payment = 8596.0;
         // Check payment
-        const checkPayment = payment >= (totalForCart + totalForCart__);
+        const checkPayment = payment >= totalForCart + totalForCart__;
         if (checkPayment) await ShoppingCart.removeAll(data);
 
         // Get cart
         // Join both arrays
-        const joinCarts = (await ShoppingCart.getCart(data)).concat(await ShoppingCart.getCart(data__));
+        const joinCarts = (await ShoppingCart.getCart(data)).concat(
+            await ShoppingCart.getCart(data__)
+        );
 
         assert.deepEqual([], joinCarts);
     });
 
     it("should not be able to delete shoes in the cart when a payment is not enough", async () => {
         const data = {
-            username: "tommyshado",
+            id: "1",
             // shoe_id for samba black adidas
             shoeId: "1",
         };
@@ -203,7 +229,7 @@ describe("shopping cart unit testing", function () {
 
         const cart = await ShoppingCart.getCart(data);
         // Get payment from the user ---> req.body.payment
-        const payment = 500.00;
+        const payment = 500.0;
 
         // Store cart total
         let totalForCart = 0;
@@ -211,9 +237,9 @@ describe("shopping cart unit testing", function () {
         for (const shoeInCart in cart) {
             // Get the shoes price and...
             // add to the total variable
-            const price = cart[shoeInCart].total
+            const price = cart[shoeInCart].total;
             totalForCart += Number(price);
-        };
+        }
 
         // Check payment
         const checkPayment = payment >= totalForCart;
