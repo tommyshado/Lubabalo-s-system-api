@@ -25,13 +25,10 @@ authRouter.post("/signup", async (req, res) => {
         
         // USER object
         const user = {
-            name: req.body.name,
-            email: req.body.email,
+            name: req.body.name.toLowerCase(),
+            email: req.body.email.toLowerCase(),
             password: hashedPassword
         };
-
-        user.name.toLowerCase();
-        user.email.toLowerCase();
 
         // CREATE new user
         await AuthService.createUser(user);
@@ -75,29 +72,21 @@ authRouter.post("/login", async (req, res) => {
 
         // USER object
         const user = {
-            usernameOrEmail: req.body.usernameOrEmail,
+            usernameOrEmail: req.body.usernameOrEmail.toLowerCase(),
             password: req.body.password
-        }; 
-
-        user.usernameOrEmail.toLowerCase()
+        };
 
         // Checks registered users
         const getUser = await AuthService.checkUser(user);
 
         if (getUser.length === 0) return res.json({
             status: "error",
-            error: "Not registered in the signup page."
+            error: "User not found."
         })
 
-        let password;
-        let userId;
-        let role;
-        
-        getUser.forEach(results => {
-            password = results.password;
-            userId = results.user_id;
-            role = results.role;
-        });
+        console.log(getUser[0])
+
+        const { password, user_id, role } = getUser[0];
 
         const validPassword = await bcrypt.compare(user.password, password);
 
@@ -106,15 +95,14 @@ authRouter.post("/login", async (req, res) => {
             error: "Invalid password."
         });
 
-
         const token = jwt.sign({
-            id: userId
+            id: user_id
         }, process.env.TOKEN, { expiresIn: '1h' });
 
         res.header("auth-token", token).status(200).json({
-            status: "Logged in...",
+            status: "Logged in.",
             token: token,
-            loggedUserId: userId,
+            loggedUserId: user_id,
             role: role
         });
 
