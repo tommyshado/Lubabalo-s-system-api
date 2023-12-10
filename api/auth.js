@@ -82,9 +82,7 @@ authRouter.post("/login", async (req, res) => {
         if (getUser.length === 0) return res.json({
             status: "error",
             error: "User not found."
-        })
-
-        console.log(getUser[0])
+        });
 
         const { password, user_id, role } = getUser[0];
 
