@@ -25,51 +25,51 @@ const shoesService = (database) => {
             );
         } else {
             await database.none(
-                `update stock_inventory set shoe_qty = shoe_qty + ${data[4]} where shoe_name = '${data[0]}'`
+                `update stock_inventory set shoe_qty = shoe_qty + $1 where shoe_name = $2`, [data[4], data[0]]
             );
         }
     };
 
     const insertShoeHelper = async (shoe) =>
         await database.manyOrNone(
-            `select * from stock_inventory where shoe_name = '${shoe.shoe_name}'`
+            `select * from stock_inventory where shoe_name = $1`, shoe.shoe_name
         );
 
     const updateInventory = async (shoeId) => {
         await database.none(
-            `update stock_inventory set shoe_qty = shoe_qty - 1 where shoe_id = ${shoeId} and shoe_qty > 0`
+            `update stock_inventory set shoe_qty = shoe_qty - 1 where shoe_id = $1 and shoe_qty > 0`, shoeId
         );
     };
 
     const increaseInventory = async (shoeId) => {
         await database.none(
-            `update stock_inventory set shoe_qty = shoe_qty + 1 where shoe_id = ${shoeId}`
+            `update stock_inventory set shoe_qty = shoe_qty + 1 where shoe_id = $1`, shoeId
         );
     };
 
     const deleteShoe = async (shoeId) =>
         await database.oneOrNone(
-            `delete from stock_inventory where shoe_id = ${shoeId}`
+            `delete from stock_inventory where shoe_id = $1`, shoeId
         );
 
     const getShoeBrand = async (brandname) =>
         await database.manyOrNone(
-            `select * from stock_inventory where shoe_name like '%${brandname}%'`
+            `select * from stock_inventory where shoe_name = $1`, [brandname]
         );
 
     const getShoeBySize = async (shoeSize) =>
         await database.manyOrNone(
-            `select * from stock_inventory where shoe_size = '${shoeSize}'`
+            `select * from stock_inventory where shoe_size = $1`, shoeSize
         );
 
     const getShoeBySizeAndBrand = async (shoe) =>
         await database.manyOrNone(
-            `select * from stock_inventory where shoe_size = '${shoe.shoeSize}' and shoe_name = '${shoe.shoeName}'`
+            `select * from stock_inventory where shoe_size = $1 and shoe_name = $2`, [shoe.shoeSize, shoe.shoeName]
         );
 
     const filterByColor = async (color) =>
         await database.manyOrNone(
-            `select * from stock_inventory where shoe_color = '${color}'`
+            `select * from stock_inventory where shoe_color = $1`, color
         );
 
     const filterByColorAndBrand = async (filtered) => {
@@ -92,17 +92,17 @@ const shoesService = (database) => {
 
     const getMenShoes = async (catagory) =>
         await database.manyOrNone(
-            `select * from stock_inventory where catagory = '${catagory.men}'`
+            `select * from stock_inventory where catagory = $1`, catagory.men
         );
 
     const getWomenShoes = async (catagory) =>
         await database.manyOrNone(
-            `select * from stock_inventory where catagory = '${catagory.women}'`
+            `select * from stock_inventory where catagory = $1`, catagory.women
         );
 
     const getKidsShoes = async (catagory) =>
         await database.manyOrNone(
-            `select * from stock_inventory where catagory = '${catagory.kids}'`
+            `select * from stock_inventory where catagory = $1'`, catagory.kids
         );
 
     return {
