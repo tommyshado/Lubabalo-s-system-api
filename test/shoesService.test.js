@@ -231,7 +231,7 @@ describe("shoes service testing", function () {
         // INSERTING values into the database
         await ShoesService.insertShoe(data__);
         // takes in a param of brand name
-        const filterByBrandName = await ShoesService.getShoeBrand("new_");
+        const filterByBrandName = await ShoesService.getShoeBrand("new_balance");
 
         assert.deepEqual([
             {

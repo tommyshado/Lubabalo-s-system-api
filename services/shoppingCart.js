@@ -9,7 +9,7 @@ const shoppingCart = (database) => {
             `select stock_inventory.description, shopping_cart.shoe_id, shopping_cart.quantity, stock_inventory.shoe_price,
             (shopping_cart.quantity * stock_inventory.shoe_price) AS total
             from stock_inventory inner join shopping_cart ON stock_inventory.shoe_id = shopping_cart.shoe_id
-            where shopping_cart.user_id = $1`, data.id
+            where shopping_cart.user_id = $1`, [data.id]
         );
 
     const addToCart = async (data) => {
