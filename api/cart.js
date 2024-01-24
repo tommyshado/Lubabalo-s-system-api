@@ -20,11 +20,7 @@ router.get("/", verifyToken, async (req, res) => {
             id: req.user.id
         };
         const cart = await ShoppingCart.getCart(data);
-
-        let cartTotal = 0;
-        const sumTotals = (shoeInCart) => cartTotal += Number(shoeInCart.total);
-
-        cart.forEach(sumTotals);
+        const cartTotal = cart.reduce((total, shoeInCart) => total + Number(shoeInCart.total), 0);
 
         res.json({
             status: "success",
@@ -117,11 +113,7 @@ router.post("/payment", verifyToken, async (req, res) => {
             id: req.user.id
         };
         const cart = await ShoppingCart.getCart(data);
-
-        let cartTotal = 0;
-        const sumTotals = (shoeInCart) => cartTotal += Number(shoeInCart.total);
-
-        cart.forEach(sumTotals);
+        const cartTotal = cart.reduce((total, shoeInCart) => total + Number(shoeInCart.total), 0);
 
         const checkPayment = payment >= cartTotal;
 
