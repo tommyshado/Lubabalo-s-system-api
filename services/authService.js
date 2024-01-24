@@ -11,26 +11,10 @@ const authService = (database) => {
 
     const checkUser = async ({usernameOrEmail}) => {
         const checksEmail = usernameOrEmail.includes("@");
+        const filter = checksEmail ? "WHERE email = $1" : "WHERE username = $1";
+        const query = `SELECT * FROM user_signup ${filter}`;
 
-        if (!checksEmail) {
-            const data = [
-                usernameOrEmail
-            ];
-            const filter = `where username = $1`;
-            const query = `select * from user_signup ${filter}`;
-            
-            return await database.manyOrNone(query, data);
-        };
-
-        if (checksEmail) {
-            const data = [
-                usernameOrEmail
-            ];
-            const filter = `where email = $1`;
-            const query = `select * from user_signup ${filter}`;
-
-            return await database.manyOrNone(query, data);
-        };
+        return await database.manyOrNone(query, [usernameOrEmail]);
     };
 
     return {
