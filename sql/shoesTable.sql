@@ -12,7 +12,7 @@ create table stock_inventory (
 
 create table user_signup (
     user_id serial PRIMARY KEY,
-    name text unique not null,
+    username text unique not null,
     password text,
     email unique text
 )

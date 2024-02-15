@@ -111,6 +111,7 @@ describe("shopping cart unit testing", function () {
                     shoe_id: "1",
                     shoe_price: "1799",
                     total: "1799",
+                    username: "tommyshado"
                 },
             ],
             cart
@@ -138,6 +139,7 @@ describe("shopping cart unit testing", function () {
                     quantity: 0,
                     shoe_price: "2499",
                     total: "0",
+                    username: "tommyshado"
                 },
             ],
             cart
