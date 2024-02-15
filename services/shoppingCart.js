@@ -43,7 +43,6 @@ const shoppingCart = (database) => {
     );
 
   const removeFromCart = async ({ shoeId, id }) => {
-    const data = [shoeId, id];
     const checkHelper = await removeFromCartHelper(shoeId, id);
 
     if (checkHelper) {
