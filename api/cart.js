@@ -109,7 +109,7 @@ const shoppingCartAPI = (shoppingCartInstance) => {
       }
 
       // Remove all from the cart
-      await database.removeAll(data);
+      await shoppingCartInstance.removeAll(data);
 
       let currentMoment = moment();
 
