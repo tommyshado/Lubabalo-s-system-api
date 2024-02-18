@@ -1,25 +1,18 @@
-
 import express from "express";
 import bodyParser from "body-parser";
-
-// Import sessions
 import session from "express-session";
-
-// Cors import
 import cors from "cors";
 
-// API imports
-import shoesAPI from "./api/shoes.js";
-import cartAPI from "./api/cart.js";
-import authAPI from "./api/auth.js";
+// Routes imports
+import cartRoutes from "./routes/cart-routes.js";
+import authRoutes from "./routes/auth-routes.js";
+import shoesRoutes from "./routes/shoes-routes.js";
 
 // Instances
 const app = express();
 
 // Cors middleware
-app.use(cors({
-    origin: "*"
-}));
+app.use(cors());
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,9 +20,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Routes Middleware
-app.use("/api/shoes", shoesAPI);
-app.use("/api/cart", cartAPI);
-app.use("/api/user", authAPI);
+app.use("/api/shoes", shoesRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/user", authRoutes);
 
 // initialise session middleware - flash-express depends on it
 app.use(session({
