@@ -49,7 +49,7 @@ const shoppingCart = (database) => {
       // Increase the quantity of the stock
       await shoes.increaseInventory(shoeId);
 
-      if (checkHelper.quantity === "0") {
+      if (checkHelper.quantity === 0) {
         // Remove the shoe in the cart
         await database.none(
           `delete from shopping_cart where shoe_id = $1 and user_id = $2`,
